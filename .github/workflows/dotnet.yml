@@ -82,7 +82,7 @@ jobs:
         dotnet-version: 6.0.x
 
   security_checks:
-    needs: deploy_to_test
+    needs: pdt_for_test
     runs-on: ubuntu-latest
 
     steps:
@@ -96,11 +96,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+    - uses: trstringer/manual-approval@v1.9.0
       with:
-        dotnet-version: 6.0.x
+        secret: ${{ github.TOKEN }}
+        approvers: cphe.hlophe@gmail.com
+        minimum-approvals: 1
+        issue-title: "Deploying v1.3.5 to prod from staging"
+        issue-body: "Please approve or deny the deployment of version v1.3.5."
+        exclude-workflow-initiator-as-approver: false 
 
   deploy_to_staging:
     needs: promote_to_staging_and_production
