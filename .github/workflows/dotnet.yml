@@ -82,7 +82,7 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Run PDT (API E2E) Tests
-      run: dotnet test Shift.Left.testing.Poc.Api.e2e.Tests/Shift.Left.Testing.Poc.Api.e2e.Tests.csproj --no-build --verbosity normal
+      run: dotnet test /home/runner/work/shift-left-testing-example/shift-left-testing-example/Shift.Left.testing.Poc.Api.e2e.Tests/Shift.Left.Testing.Poc.Api.e2e.Tests.csproj --no-build --verbosity normal
 
   security_checks:
     needs: pdt_for_test
