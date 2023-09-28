@@ -64,11 +64,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.1.1
       with:
-        dotnet-version: 6.0.x
+        name: website
+        path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/website/**
 
   pdt_for_test:
     needs: deploy_to_test
