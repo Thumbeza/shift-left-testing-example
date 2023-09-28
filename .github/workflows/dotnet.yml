@@ -36,5 +36,5 @@ jobs:
       uses: actions/upload-artifact@v3.1.3
       with:
         name: website
-        path: shift-left-testing-example/website/**
+        path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/website/**
         if-no-files-found: error
