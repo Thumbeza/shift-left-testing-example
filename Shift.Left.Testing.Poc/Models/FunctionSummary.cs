@@ -1,5 +1,8 @@
-﻿namespace Shift.Left.Testing.Poc.Models;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Shift.Left.Testing.Poc.Models;
+
+[ExcludeFromCodeCoverage]
 public class FunctionSummary
 {
     public int FirstNumber { get; set; }
