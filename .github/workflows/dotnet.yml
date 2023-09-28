@@ -1,6 +1,6 @@
 # This workflow will build and run unit tests
 
-name: Build and Test
+name: build_test_and_deploy
 
 on:
   push:
@@ -58,3 +58,38 @@ jobs:
         name: website
         path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/website/**
         if-no-files-found: error
+
+  deploy_to_test:
+    needs: build
+    runs-on: ubuntu-latest
+
+  pdt_for_test:
+    needs: deploy_to_test
+    runs-on: ubuntu-latest
+
+  security_checks:
+    needs: deploy_to_test
+    runs-on: ubuntu-latest
+
+  promote_to_staging_and_production:
+    runs-on: ubuntu-latest
+
+  deploy_to_staging:
+    needs: promote_to_staging_and_production
+    runs-on: ubuntu-latest
+
+  pdt_for_staging:
+    needs: deploy_to_staging
+    runs-on: ubuntu-latest
+
+  deploy_to_production:
+    needs: pdt_for_staging
+    runs-on: ubuntu-latest
+
+  pdt_for_production:
+    needs: deploy_to_production
+    runs-on: ubuntu-latest
+
+  finish_release:
+    needs: pdt_for_production
+    runs-on: ubuntu-latest
