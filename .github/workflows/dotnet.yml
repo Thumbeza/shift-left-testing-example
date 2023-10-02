@@ -1,4 +1,4 @@
-# This workflow will build and run unit tests
+# This workflow will build, test and deploy math api project
 
 name: build_test_and_deploy
 
@@ -85,7 +85,7 @@ jobs:
       run: dotnet test /**/Shift.Left.Testing.Poc.Api.e2e.Tests.dll --no-build --verbosity normal
 
   security_checks:
-    needs: pdt_for_test
+    needs: deploy_to_test
     runs-on: ubuntu-latest
 
     steps:
@@ -95,8 +95,19 @@ jobs:
       with:
         dotnet-version: 6.0.x
 
+  performance_tests:
+    needs: deploy_to_test
+    runs-on: ubuntu-latest
+      
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+
   promote_to_staging_and_production:
-    needs: [build, deploy_to_test, pdt_for_test]
+    needs: [pdt_for_test, security_checks, performance_tests]
     runs-on: ubuntu-latest
 
     steps:
