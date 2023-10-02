@@ -2,13 +2,13 @@
 using Shift.Left.Testing.Poc.Controllers;
 using Shift.Left.Testing.Poc.Models;
 
-namespace Shift.Left.Testing.Poc.Tests;
+namespace Shift.Left.Testing.Poc.Tests.Tests;
 
 public class BasicArithmeticTests
 {
     private readonly ILogger<BasicArithmeticController> _testLogger;
     private readonly BasicArithmeticController _basicArithmetic;
-    public BasicArithmeticTests() 
+    public BasicArithmeticTests()
     {
         var mock = new Mock<ILogger<BasicArithmeticController>>();
 
