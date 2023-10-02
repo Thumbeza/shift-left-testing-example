@@ -9,6 +9,10 @@ The purpose of this prrojeect is to demonstrate how software engineering teams c
 # Branching Strategy
 For the purpose of this demonstration, a trunk based branching strategy will be used. The Main (or trunk) branch is always the main source of truth for the team. Software Engineers will create short lived feature or test branches from Main, implement the relevant changes and create a pull request to merge back to Main on frequent intervals. To support this branching strategy, planning must ensure that work is broken down into smaller features to allow individual engineers to work on those independantly and merge changes to Main frequently. For more details on Trunk Based Development, please see: https://www.atlassian.com/continuous-delivery/continuous-integration/trunk-based-development
 
+example branches:
+- feat/[issue-number]-adding-a-new-api-enpoint
+- test/[same-as-the-above-issue-number]-adding-api-tests-for-the-above-issue
+
 # Testing Process
 
 ## Unit Tests and Code Coverage
