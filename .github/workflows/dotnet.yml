@@ -31,7 +31,7 @@ jobs:
     # Run unit tests
     - name: Run Unit Tests
       run: dotnet test Shift.Left.Testing.Poc.Tests/Shift.Left.Testing.Poc.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
-    gggggggggf
+    
     # Get the unit test code coverage using Coverlet Collector
     - name: Code Coverage Report
       uses: irongut/CodeCoverageSummary@v1.3.0
