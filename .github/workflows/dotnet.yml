@@ -28,7 +28,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     
-    # Run unit tests
+    # Run unit tests collect test coverage
     - name: Run Unit Tests
       run: dotnet test Shift.Left.Testing.Poc.Tests/Shift.Left.Testing.Poc.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
     
@@ -65,9 +65,9 @@ jobs:
         path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/math-api
         if-no-files-found: error
 
-    # Publish and upload test artifacts
+    # Publish and upload e2e test artifacts
     - name: Publish Test Artifacts
-      run: dotnet publish Shift.Left.Testing.Poc/Shift.Left.Testing.Poc.csproj -c Release -o tests
+      run: dotnet publish Shift.Left.testing.Poc.Api.e2e.Tests/Shift.Left.Testing.Poc.Api.e2e.Tests.csproj -c Release -o tests
         
     - name: Upload Test Artifacts
       uses: actions/upload-artifact@v3.1.3
@@ -116,8 +116,8 @@ jobs:
         dotnet-version: 6.0.x
     
     # Run api e2e tests
-    - name: Run PDT (API E2E) Tests
-      run: dotnet test /**/Shift.Left.Testing.Poc.Api.e2e.Tests.dll --no-build --verbosity normal
+    - name: Run PDT (API E2E Tests)
+      run: dotnet test /home/runner/work/shift-left-testing-example/shift-left-testing-example/tests/**/*Api.e2e.Tests.csproj --no-build --verbosity normal
 
   security_checks:
     needs: deploy_to_test
