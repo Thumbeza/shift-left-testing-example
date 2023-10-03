@@ -7,6 +7,7 @@ namespace Shift.Left.Testing.Poc.Api.e2e.Tests.Tests
         [Fact]
         public void Example()
         {
+            //sample comment
             "Sphe".Should().NotContain("f");
         }
     }
