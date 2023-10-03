@@ -49,14 +49,24 @@ jobs:
         recreate: true
         path: code-coverage-results.md
       
-    - name: Publish Artifacts
-      run: dotnet publish Shift.Left.Testing.Poc/Shift.Left.Testing.Poc.csproj -c Release -o website
+    - name: Publish API Artifacts
+      run: dotnet publish Shift.Left.Testing.Poc/Shift.Left.Testing.Poc.csproj -c Release -o math-api
       
-    - name: Upload Build Artifacts
+    - name: Upload API Artifacts
       uses: actions/upload-artifact@v3.1.3
       with:
-        name: website
-        path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/website/**
+        name: api
+        path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/math-api/**
+        if-no-files-found: error
+
+    - name: Publish Test Artifacts
+      run: dotnet publish Shift.Left.Testing.Poc/Shift.Left.Testing.Poc.csproj -c Release -o tests
+        
+    - name: Upload Test Artifacts
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        name: tests
+        path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/tests/**
         if-no-files-found: error
 
   deploy_to_test:
@@ -64,23 +74,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download a Build Artifact
+    # Checkout the repo
+    - name: Download API Artifacts
       uses: actions/download-artifact@v2.1.1
       with:
-        name: website
-        path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/website/**
+        name: api
+        path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/math-api/**
+
+    # Deploy to Azure Web apps
+    - name: Publishing math-api to Azure app service
+      uses: azure/webapps-deploy@v2
+      with: 
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
 
   pdt_for_test:
     needs: deploy_to_test
     runs-on: ubuntu-latest
 
     steps:
+    # Download the api e2e test artifacts 
+    - name: Download Test Artifacts
+      uses: actions/download-artifact@v2.1.1
+      with:
+        name: api
+        path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/tests/**
+    
+    # download the dotnet sdk that matches the test project
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-
+    
+    # Run api e2e tests
     - name: Run PDT (API E2E) Tests
       run: dotnet test /**/Shift.Left.Testing.Poc.Api.e2e.Tests.dll --no-build --verbosity normal
 
@@ -106,68 +133,4 @@ jobs:
         with:
           dotnet-version: 6.0.x
 
-  promote_to_staging_and_production:
-    needs: [pdt_for_test, security_checks, performance_tests]
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
-
-  deploy_to_staging:
-    needs: promote_to_staging_and_production
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-
-  pdt_for_staging:
-    needs: deploy_to_staging
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-
-  deploy_to_production:
-    needs: pdt_for_staging
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-
-  pdt_for_production:
-    needs: deploy_to_production
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-
-  finish_release:
-    needs: pdt_for_production
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
+  
