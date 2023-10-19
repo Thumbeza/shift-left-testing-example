@@ -111,4 +111,68 @@ public class BasicArithmeticTests
 
         functionSummary.Result.Should().Be(-42);
     }
+
+    [Fact]
+    public void FunctionTypeIsDivisionWhenDividing()
+    {
+        var functionSummary = _basicArithmetic.Division(100, 2);
+
+        functionSummary.Type.Should().Be("Division");
+    }
+
+    [Fact]
+    public void DividingPositiveDividendWithPositiveDivisor()
+    {
+        var functionSummary = _basicArithmetic.Division(10, 2);
+
+        functionSummary.Result.Should().Be(5);
+    }
+
+    [Fact]
+    public void DividingNegativeDividendWithPositiveDivisor()
+    {
+        var functionSummary = _basicArithmetic.Division(-100, 4);
+
+        functionSummary.Result.Should().Be(-25);
+    }
+    [Fact]
+    public void DividingNegativeDividendWithNegetiveDivisor()
+    {
+        var functionSummary = _basicArithmetic.Division(-40, -5);
+
+        functionSummary.Result.Should().Be(8);
+    }
+
+    [Fact]
+    public void DividingSamePositiveDividendAndDivisor()
+    {
+        var functionSummary = _basicArithmetic.Division(100, 100);
+
+        functionSummary.Result.Should().Be(1);
+    }
+
+    [Fact]
+    public void DividingSameNegetiveDividendAndDivisor()
+    {
+        var functionSummary = _basicArithmetic.Division(-20, -20);
+
+        functionSummary.Result.Should().Be(1);
+    }
+
+    [Fact]
+    public void DividingPositiveDividendWithZeroDivisor()
+    {
+        var functionSummary = _basicArithmetic.Division(150, 0);
+
+       functionSummary.Error.Should().Be("Division by zero is not allowed.");
+        
+    }
+
+    [Fact]
+    public void DividingNegetiveeDividendWithZeroDivisor()
+    {
+        var functionSummary = _basicArithmetic.Division(-8, 0);
+
+        functionSummary.Error.Should().Be("Division by zero is not allowed.");
+    }
 }
