@@ -15,8 +15,4 @@
     <ProjectReference Include="..\We.Sell.Bread.Infrastructure\We.Sell.Bread.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOs\Orders\" />
-  </ItemGroup>
-
 </Project>

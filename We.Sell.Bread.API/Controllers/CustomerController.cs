@@ -11,19 +11,19 @@ public class CustomerController : ControllerBase
     private readonly IUnitOfWork<OrderDBContext> _unitOfWork = new UnitOfWork<OrderDBContext>();
 
     private readonly ILogger<CustomerController> _logger;
-    private BaseRepository<Customer> _baseRepository;
-    private IAsyncOrderRepository _orderRepository;
+    private GenericRepository<Customer> _baseRepository;
+    private IOrderRepository _orderRepository;
 
     public CustomerController(ILogger<CustomerController> logger)
     {
         _logger = logger;
 
-        _baseRepository = new BaseRepository<Customer>(_unitOfWork);
+        _baseRepository = new GenericRepository<Customer>(_unitOfWork);
         _orderRepository = new OrderRepository(_unitOfWork);
     }
 
     [HttpPost(Name = "Post")]
-    public async Task<AddCustomer.Response> CreateAsync(AddCustomer.Request model)
+    public async Task<AddCustomer.Response> PostAsync(AddCustomer.Request model)
     {
 
         _logger.LogInformation($"Attempting to create a neew customer: {model.CustomerName}");
@@ -37,7 +37,7 @@ public class CustomerController : ControllerBase
             PhysicalAddress = model.PhysicalAddress
         };
 
-        await _baseRepository.AddAsync(custormer);
+        _baseRepository.Add(custormer);
         await _unitOfWork.SaveChangesAsync();
 
         var response = new AddCustomer.Response
