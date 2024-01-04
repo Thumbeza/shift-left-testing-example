@@ -86,12 +86,12 @@ jobs:
         path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/bread-api
 
     # Deploy to Azure Web apps
-    - name: Publishing bread-api to Azure app service
-      uses: azure/webapps-deploy@v2
-      with: 
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
-        package: /home/runner/work/shift-left-testing-example/shift-left-testing-example/bread-api
+    # - name: Publishing bread-api to Azure app service
+      # uses: azure/webapps-deploy@v2
+      # with: 
+      #   app-name: ${{ env.AZURE_WEBAPP_NAME }}
+      #   publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
+      #   package: /home/runner/work/shift-left-testing-example/shift-left-testing-example/bread-api
 
   security_checks:
     needs: deploy_to_test
