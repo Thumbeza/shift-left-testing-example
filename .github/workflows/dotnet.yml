@@ -30,11 +30,11 @@ jobs:
     
     # Run unit tests and collect code coverage
     - name: Run Unit Tests
-      run: dotnet test We.Sell.Bread.Unit.Tests/We.Sell.Bread.Unit.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
+      run: dotnet test We.Sell.Bread.API.Unit.Tests/We.Sell.Bread.API.Unit.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
 
     # Run Integration tests and collect code coverage
     - name: Run Integration Tests
-      run: dotnet test We.Sell.Bread.Integration.Tests/We.Sell.Bread.Integration.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
+      run: dotnet test We.Sell.Bread.API.Integration.Tests/We.Sell.Bread.API.Integration.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
     
     # Get the test code coverage using Coverlet Collector
     - name: Code Coverage Report
