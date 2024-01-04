@@ -9,11 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "We.Sell.Bread.Domain", "We.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "We.Sell.Bread.Infrastructure", "We.Sell.Bread.Infrastructure\We.Sell.Bread.Infrastructure.csproj", "{BAC4D6B0-EE8C-4B1B-AE85-0DEBA873005B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "We.Sell.Bread.API.Unit.Tests", "We.Sell.Bread.API.Unit.Tests\We.Sell.Bread.API.Unit.Tests.csproj", "{3ACB0F14-EA00-4E34-AFAB-0365D9747EC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "We.Sell.Bread.API.Unit.Tests", "We.Sell.Bread.API.Unit.Tests\We.Sell.Bread.API.Unit.Tests.csproj", "{3ACB0F14-EA00-4E34-AFAB-0365D9747EC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "We.Sell.Bread.API.Integration.Tests", "We.Sell.Bread.API.Integration.Tests\We.Sell.Bread.API.Integration.Tests.csproj", "{0528169F-77A0-478A-8D65-2D5BBE64F48B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7A3A67D1-69EC-4227-BF49-EE4169A2E976}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "We.Sell.Bread.API.Integration.Tests", "We.Sell.Bread.API.Integration.Tests\We.Sell.Bread.API.Integration.Tests.csproj", "{0528169F-77A0-478A-8D65-2D5BBE64F48B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,10 +42,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{3ACB0F14-EA00-4E34-AFAB-0365D9747EC6} = {7A3A67D1-69EC-4227-BF49-EE4169A2E976}
-		{0528169F-77A0-478A-8D65-2D5BBE64F48B} = {7A3A67D1-69EC-4227-BF49-EE4169A2E976}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {19F1FDBA-D55A-4187-B96A-871F47CBE332}

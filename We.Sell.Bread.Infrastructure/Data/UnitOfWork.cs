@@ -7,6 +7,7 @@ public class UnitOfWork<TContext> : IUnitOfWork<TContext>, IDisposable where TCo
 {
     private bool _disposed;
     private DbContextTransaction _dbTransaction;
+
     public UnitOfWork()
     {
         Context = new TContext();
@@ -33,6 +34,7 @@ public class UnitOfWork<TContext> : IUnitOfWork<TContext>, IDisposable where TCo
     public void Rollback()
     {
         _dbTransaction.Rollback();
+        _dbTransaction.Dispose();
     }
 
     //Save changes to the database

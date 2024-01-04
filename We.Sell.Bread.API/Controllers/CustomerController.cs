@@ -38,7 +38,7 @@ public class CustomerController : ControllerBase
         };
 
         _baseRepository.Add(custormer);
-        await _unitOfWork.SaveChangesAsync();
+        //await _unitOfWork.SaveChangesAsync();
 
         var response = new AddCustomer.Response
         {
@@ -47,6 +47,30 @@ public class CustomerController : ControllerBase
         };
 
         _logger.LogInformation($"New custormer hase been created: {response.Id}");
+
+        return response;
+    }
+
+    [HttpGet(Name = "GetById")]
+    public AddCustomer.Response GetById(string customerId)
+    {
+
+        _logger.LogInformation($"Getting custormer by Id: {customerId}");
+
+        if (string.IsNullOrEmpty(customerId)) 
+        {
+            throw new ArgumentNullException(customerId, "Customer Id cannot not be null.");
+        }
+
+        //_baseRepository.Add(custormer);
+
+        var response = new AddCustomer.Response
+        {
+            Id = Guid.NewGuid(),
+            CustomerName = "SampleName"
+        };
+
+        _logger.LogInformation($"A cusstomer with Id: {customerId} has been retrieved");
 
         return response;
     }
