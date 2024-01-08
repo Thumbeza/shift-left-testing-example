@@ -1,5 +1,5 @@
 # overview
-The purpose of this prrojeect is to demonstrate how software engineering teams can implement a shift-left testing approach to ensure effective and early testing for their software. The main of shift-left testing is to identify and resolve bugs as early as possible in the SDLC, hence it's core implementation is about shifting testing activities to earlier stages of the ci/cd pipeline. Below are the details on how to implement and enforce this process:
+The purpose of this prrojeect is to demonstrate how software engineering teams can implement a shift-left testing approach to ensure effective and early testing for their software. The main of shift-left testing is to identify and resolve bugs as early as possible in the SDLC, hence its core implementation is about shifting testing activities to earlier stages of the ci/cd pipeline, thus enabling an early feedback loop to software quality. Below are the details on how to implement and enforce this process:
 
 # Application in Test
 * **We.Sell.Bread.Domain** - This is the core project where all the common elements of the application will reside. This speaks to interfaces, exceptions, entities and base functionality to be utalised by the API and Infrastructure projects.
