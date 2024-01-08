@@ -39,6 +39,8 @@ example branches:
     - Subsequently, the two pull requests can be merged.
 
 NB: As far as the CI is concerned, the pull requeest process starts from the build step and and ends on the test environment PDTs.
+![pull_request](https://github.com/Thumbeza/shift-left-testing-example/assets/115139003/fedff177-a80f-4d27-827b-089991dbf3d4)
+
 
 ## Releases
 - The release process is very similar to the pull request process with the following additions and exclusions:
