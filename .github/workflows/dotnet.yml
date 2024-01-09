@@ -128,10 +128,11 @@ jobs:
 
   approve_staging_or_uat_release: 
     runs-on: ubuntu-latest 
-       
+
     steps:
       - uses: trstringer/manual-approval@v1
         with:
+          secret: ${{ github.TOKEN }}
           approvers: Thumbeza
           minimum-approvals: 1
           issue-title: "Deploying v1.3.5 to prod from staging"
