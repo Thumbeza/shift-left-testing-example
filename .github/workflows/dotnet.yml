@@ -151,18 +151,7 @@ jobs:
         name: api
         path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/bread-api
 
-  performance_tests:
-    needs: deploy_to_staging_or_uat
-    runs-on: ubuntu-latest
-      
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
-
-  e2e_tests:
+  staging_e2e_tests:
     needs: deploy_to_staging_or_uat
     runs-on: ubuntu-latest
       
