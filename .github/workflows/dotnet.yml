@@ -151,8 +151,6 @@ jobs:
         name: api
         path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/bread-api
 
-    # Deploy to staging or uat
-
   performance_tests:
     needs: deploy_to_staging_or_uat
     runs-on: ubuntu-latest
