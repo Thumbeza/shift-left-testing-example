@@ -126,7 +126,9 @@ jobs:
         with:
           dotnet-version: 6.0.x
 
-  approve_staging_or_uat_release:     
+  approve_staging_or_uat_release: 
+    runs-on: ubuntu-latest 
+       
     steps:
       - uses: trstringer/manual-approval@v1
         with:
