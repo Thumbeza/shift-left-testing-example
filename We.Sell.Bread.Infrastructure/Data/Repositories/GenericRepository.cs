@@ -46,7 +46,18 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable where T :
         return true;
     }
 
-    public T Get(Expression<Func<T, bool>> expression) => Entities.FirstOrDefault(expression);
+    public T Get(Expression<Func<T, bool>> expression)
+    {
+        try
+        {
+            return Entities.FirstOrDefault(expression);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        
+    }
 
     public List<T> GetAll() => Entities.ToList();
 
