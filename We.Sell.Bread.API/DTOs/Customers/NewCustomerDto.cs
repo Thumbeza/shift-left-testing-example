@@ -1,6 +1,6 @@
 ﻿namespace We.Sell.Bread.API.DTOs.Customers;
 
-public class CustomerDto
+public class NewCustomerDto
 {
     public string CustomerName { get; set; }
     public string ContactNo { get; set; }

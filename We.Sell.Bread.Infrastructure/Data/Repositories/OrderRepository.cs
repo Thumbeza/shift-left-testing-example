@@ -6,6 +6,11 @@ public class OrderRepository : GenericRepository<Order>, IOrderRepository
     {
     }
 
+    public Order GetOrderById(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     public IEnumerable<Order> GetOrderByPaymentStatus(bool isPaid)
     {
         throw new NotImplementedException();

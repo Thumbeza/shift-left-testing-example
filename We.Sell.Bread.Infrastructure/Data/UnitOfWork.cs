@@ -1,5 +1,5 @@
 ﻿using System.Data.Entity;
-using We.Sell.Bread.Infrastructure.Exceptions;
+using We.Sell.Bread.Domain.Exceptions;
 
 namespace We.Sell.Bread.Infrastructure.Data;
 

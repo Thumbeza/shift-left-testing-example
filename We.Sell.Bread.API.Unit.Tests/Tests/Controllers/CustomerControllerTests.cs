@@ -26,15 +26,15 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
             customer.Should().Throw<ArgumentNullException>().WithMessage("Customer Id cannot not be null.");
         }
 
-        //[Fact]
-        //public void GivenNullModelWhenAddingNewCustomerThrowArgumentNullException()
-        //{
-        //    var customerController = new CustomerController(_logger);
-        //    var emptyCustomer = new CustomerDto { };
+        [Fact]
+        public void GivenNullModelWhenAddingNewCustomerThrowArgumentNullException()
+        {
+            var customerController = new CustomerController(_logger);
+            var emptyCustomer = new NewCustomerDto { };
 
-        //    var customer = () => customerController.Post(emptyCustomer);
+            var customer = () => customerController.Post(emptyCustomer);
 
-        //    customer.Should().Throw<ArgumentNullException>().WithMessage("Customer details must be added before adding a new customer.");
-        //}
+            customer.Should().Throw<ArgumentNullException>().WithMessage("Customer details must be added before adding a new customer.");
+        }
     }
 }

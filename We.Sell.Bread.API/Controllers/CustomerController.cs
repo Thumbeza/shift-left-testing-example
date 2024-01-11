@@ -12,38 +12,46 @@ public class CustomerController : ControllerBase
 
     private readonly ILogger<CustomerController> _logger;
     private GenericRepository<Customer> _baseRepository;
-    private IOrderRepository _orderRepository;
+    private ICustomerRepository _customerRepository;
 
     public CustomerController(ILogger<CustomerController> logger)
     {
         _logger = logger;
 
         _baseRepository = new GenericRepository<Customer>(_unitOfWork);
-        _orderRepository = new OrderRepository(_unitOfWork);
+        _customerRepository = new CustomerRepository(_unitOfWork);
     }
 
     [HttpPost(Name = "Post")]
-    public async Task<AddCustomer.Response> PostAsync(AddCustomer.Request model)
+    public CustomerDetailsDto Post(NewCustomerDto customer)
     {
 
-        _logger.LogInformation($"Attempting to create a neew customer: {model.CustomerName}");
+        _logger.LogInformation($"Attempting to create a neew customer: {customer.CustomerName}");
 
-        var custormer = new Customer
+        if (customer == null) 
+        {
+            throw new ArgumentNullException("Empty Customer", "Customer details must be added before adding a new customer.");
+        }
+
+        var newCustormer = new Customer
         {
             Id = Guid.NewGuid(),
-            CustomerName = model.CustomerName,
-            ContactNo = model.ContactNo,
-            EmailAddress = model.EmailAddress,
-            PhysicalAddress = model.PhysicalAddress
+            CustomerName = customer.CustomerName,
+            ContactNo = customer.ContactNo,
+            EmailAddress = customer.EmailAddress,
+            PhysicalAddress = customer.PhysicalAddress
         };
 
-        _baseRepository.Add(custormer);
+        _baseRepository.Create(newCustormer);
         //await _unitOfWork.SaveChangesAsync();
 
-        var response = new AddCustomer.Response
+        var response = new CustomerDetailsDto
         {
-            Id = custormer.Id,
-            CustomerName = custormer.CustomerName
+            Id = newCustormer.Id,
+            CustomerName = newCustormer.CustomerName,
+            ContactNo = newCustormer.ContactNo,
+            EmailAddress = newCustormer.EmailAddress,
+            PhysicalAddress = newCustormer.PhysicalAddress
         };
 
         _logger.LogInformation($"New custormer hase been created: {response.Id}");
@@ -52,7 +60,7 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet(Name = "GetById")]
-    public AddCustomer.Response GetById(string customerId)
+    public CustomerDetailsDto GetById(string customerId)
     {
 
         _logger.LogInformation($"Getting custormer by Id: {customerId}");
@@ -62,12 +70,15 @@ public class CustomerController : ControllerBase
             throw new ArgumentNullException(customerId, "Customer Id cannot not be null.");
         }
 
-        //_baseRepository.Add(custormer);
+        var custormer = _customerRepository.GetCustomerById(Guid.Parse(customerId));
 
-        var response = new AddCustomer.Response
+        var response = new CustomerDetailsDto
         {
-            Id = Guid.NewGuid(),
-            CustomerName = "SampleName"
+            Id = custormer.Id,
+            CustomerName = custormer.CustomerName,
+            ContactNo = custormer.ContactNo,
+            EmailAddress = custormer.EmailAddress,
+            PhysicalAddress = custormer.PhysicalAddress
         };
 
         _logger.LogInformation($"A cusstomer with Id: {customerId} has been retrieved");

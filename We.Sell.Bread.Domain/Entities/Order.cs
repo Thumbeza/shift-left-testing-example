@@ -14,5 +14,5 @@ public class Order : BaseEntity
     public Customer Customer { get; set; }
     public IEnumerable<StockItem> StockItems { get; set; }
     public decimal OrderTotal { get; set; }
-    public bool IsPaid { get; set; }
+    public bool IsPaid { get; set; } = false;
 }

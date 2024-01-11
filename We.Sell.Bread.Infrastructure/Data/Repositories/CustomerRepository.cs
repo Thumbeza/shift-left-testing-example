@@ -6,6 +6,11 @@ public class CustomerRepository : GenericRepository<Customer>, ICustomerReposito
     {
     }
 
+    public Customer GetCustomerById(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     public IEnumerable<Customer> GetCustomerByName(string name)
     {
         throw new NotImplementedException();

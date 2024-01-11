@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Linq.Expressions;
+using We.Sell.Bread.Domain.Exceptions;
 
 namespace We.Sell.Bread.Infrastructure.Data.Repositories;
 
@@ -25,7 +26,7 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable where T :
         get { return _entities ??= Context.Set<T>(); }
     }
 
-    public T Add(T entity)
+    public T Create(T entity)
     {
         Entities.Add(entity);
 
@@ -46,20 +47,20 @@ public class GenericRepository<T> : IGenericRepository<T>, IDisposable where T :
         return true;
     }
 
-    public T Get(Expression<Func<T, bool>> expression)
+    public T Read(Expression<Func<T, bool>> expression)
     {
         try
         {
             return Entities.FirstOrDefault(expression);
         }
-        catch (Exception)
+        catch (Exception exception)
         {
-            throw;
+            throw new DatabaseException("The database could satisfy the user query.", exception);
         }
         
     }
 
-    public List<T> GetAll() => Entities.ToList();
+    public List<T> ReadAll() => Entities.ToList();
 
     public void Dispose()
     {
