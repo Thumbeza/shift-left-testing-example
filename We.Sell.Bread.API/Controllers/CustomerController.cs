@@ -1,6 +1,5 @@
-﻿using We.Sell.Bread.API.DTOs.Customers;
-using We.Sell.Bread.Infrastructure.Data;
-using We.Sell.Bread.Infrastructure.Data.Repositories;
+﻿using We.Sell.Bread.API.Services;
+using We.Sell.Bread.Core.DTOs.Customer;
 
 namespace We.Sell.Bread.API.Controllers;
 
@@ -8,81 +7,53 @@ namespace We.Sell.Bread.API.Controllers;
 [Route("[controller]/[action]")]
 public class CustomerController : ControllerBase
 {
-    private readonly IUnitOfWork<OrderDBContext> _unitOfWork = new UnitOfWork<OrderDBContext>();
-
     private readonly ILogger<CustomerController> _logger;
-    private GenericRepository<Customer> _baseRepository;
-    private ICustomerRepository _customerRepository;
+
+    private readonly CustomerService _customerService;
 
     public CustomerController(ILogger<CustomerController> logger)
     {
         _logger = logger;
 
-        _baseRepository = new GenericRepository<Customer>(_unitOfWork);
-        _customerRepository = new CustomerRepository(_unitOfWork);
+        _customerService = new CustomerService();
     }
 
-    [HttpPost(Name = "Post")]
-    public CustomerDetailsDto Post(NewCustomerDto customer)
+    [HttpPost(Name = "CreateCustomer")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult<CustomerDetailsDto> Post(NewCustomerDto customer)
     {
 
         _logger.LogInformation($"Attempting to create a neew customer: {customer.CustomerName}");
 
-        if (customer == null) 
-        {
-            throw new ArgumentNullException("Empty Customer", "Customer details must be added before adding a new customer.");
-        }
+        var customerDetails = _customerService.AddNewCustomer(customer.CustomerName, customer.ContactNo, customer.EmailAddress, customer.PhysicalAddress);
 
-        var newCustormer = new Customer
-        {
-            Id = Guid.NewGuid(),
-            CustomerName = customer.CustomerName,
-            ContactNo = customer.ContactNo,
-            EmailAddress = customer.EmailAddress,
-            PhysicalAddress = customer.PhysicalAddress
-        };
+        _logger.LogInformation($"New custormer hase been created: {customerDetails.Id}");
 
-        _baseRepository.Create(newCustormer);
-        //await _unitOfWork.SaveChangesAsync();
-
-        var response = new CustomerDetailsDto
-        {
-            Id = newCustormer.Id,
-            CustomerName = newCustormer.CustomerName,
-            ContactNo = newCustormer.ContactNo,
-            EmailAddress = newCustormer.EmailAddress,
-            PhysicalAddress = newCustormer.PhysicalAddress
-        };
-
-        _logger.LogInformation($"New custormer hase been created: {response.Id}");
-
-        return response;
+        return customerDetails == null? BadRequest() : customerDetails;
     }
 
-    [HttpGet(Name = "GetById")]
-    public CustomerDetailsDto GetById(string customerId)
+
+    [HttpGet(Name = "GetCustomerById")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult<CustomerDetailsDto> GetById(string customerId)
     {
 
         _logger.LogInformation($"Getting custormer by Id: {customerId}");
 
-        if (string.IsNullOrEmpty(customerId)) 
+        var isValid = Guid.TryParse(customerId, out _);
+
+        if (!isValid) 
         {
-            throw new ArgumentNullException(customerId, "Customer Id cannot not be null.");
+            return BadRequest($"Customer Id: '{customerId}' is not a valid Guid.");
         }
 
-        var custormer = _customerRepository.GetCustomerById(Guid.Parse(customerId));
+        var customerDetails = _customerService.GetCustomerDetails(new Guid(customerId));
 
-        var response = new CustomerDetailsDto
-        {
-            Id = custormer.Id,
-            CustomerName = custormer.CustomerName,
-            ContactNo = custormer.ContactNo,
-            EmailAddress = custormer.EmailAddress,
-            PhysicalAddress = custormer.PhysicalAddress
-        };
+        _logger.LogInformation($"A customer with Id: '{customerDetails.Id}' has been retrieved");
 
-        _logger.LogInformation($"A cusstomer with Id: {customerId} has been retrieved");
-
-        return response;
+        return customerDetails == null ? NotFound() : customerDetails;
     }
 }

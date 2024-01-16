@@ -2,6 +2,6 @@
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class StockController
+public class ProductController
 {
 }
