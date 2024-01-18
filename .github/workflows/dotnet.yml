@@ -126,42 +126,42 @@ jobs:
         with:
           dotnet-version: 6.0.x
 
-  approve_staging_or_uat_release: 
-    runs-on: ubuntu-latest 
+  # approve_staging_or_uat_release: 
+  #   runs-on: ubuntu-latest 
 
-    steps:
-      - uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: Thumbeza
-          minimum-approvals: 1
-          issue-title: "Deploying v1.3.5 to prod from staging"
-          issue-body: "Please approve or deny the deployment of version v1.3.5."
-          exclude-workflow-initiator-as-approver: false
-          additional-approved-words: ''
-          additional-denied-words: ''
+  #   steps:
+  #     - uses: trstringer/manual-approval@v1
+  #       with:
+  #         secret: ${{ github.TOKEN }}
+  #         approvers: Thumbeza
+  #         minimum-approvals: 1
+  #         issue-title: "Deploying v1.3.5 to prod from staging"
+  #         issue-body: "Please approve or deny the deployment of version v1.3.5."
+  #         exclude-workflow-initiator-as-approver: false
+  #         additional-approved-words: ''
+  #         additional-denied-words: ''
 
-  deploy_to_staging_or_uat:
-    needs: approve_staging_or_uat_release
-    runs-on: ubuntu-latest
+  # deploy_to_staging_or_uat:
+  #   needs: approve_staging_or_uat_release
+  #   runs-on: ubuntu-latest
 
-    steps:
+    # steps:
     # Download API artefacts
-    - name: Download API Artifacts
-      uses: actions/download-artifact@v2.1.1
-      with:
-        name: api
-        path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/bread-api
+    # - name: Download API Artifacts
+    #   uses: actions/download-artifact@v2.1.1
+      # with:
+      #   name: api
+      #   path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/bread-api
 
-  staging_e2e_tests:
-    needs: deploy_to_staging_or_uat
-    runs-on: ubuntu-latest
+  # staging_e2e_tests:
+  #   needs: deploy_to_staging_or_uat
+  #   runs-on: ubuntu-latest
       
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Setup .NET
+  #       uses: actions/setup-dotnet@v3
+  #       with:
+  #         dotnet-version: 6.0.x
 
   
