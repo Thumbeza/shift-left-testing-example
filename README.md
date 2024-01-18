@@ -38,7 +38,7 @@ Branch templates:
     - If all the above checks succeed, an approval from a test engineer must be added for software quality sign off and another approval from a software engineer must be added for code quality sign off.
     - Subsequently, the two pull requests can be merged.
 
-NB: As far as the CI is concerned, the pull requeest process starts from the build step and and ends on the test environment PDTs.
+NB: As far as the CI is concerned, the pull requeest process starts from the build step and finishes at the post deployment tests.
 ![pull_request](https://github.com/Thumbeza/shift-left-testing-example/assets/115139003/fedff177-a80f-4d27-827b-089991dbf3d4)
 
 

@@ -1,4 +1,4 @@
-﻿using We.Sell.Bread.API.Services;
+﻿using We.Sell.Bread.API.Unit.Tests.TestData;
 
 namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
 {
@@ -91,6 +91,33 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             customer.ContactNo.Should().Be(contactNo);
             customer.EmailAddress.Should().Be(emailAddress);
             customer.PhysicalAddress.Should().Be(physicalAddress);
+        }
+
+        [Fact]
+        public void GivenCorrectDetailsWhenCreatingCustomerReturnTypeMustBeCustomerDetailsDto()
+        {
+            var customerService = new CustomerService();
+
+            var customerName = Faker.Name.FullName();
+            var contactNo = Faker.Phone.Number();
+            var emailAddress = Faker.Internet.Email();
+            var physicalAddress = Faker.Address.City();
+
+            var customer = customerService.AddNewCustomer(customerName, contactNo, emailAddress, physicalAddress);
+
+            customer.Should().NotBeNull();
+            customer.Should().BeOfType(typeof(CustomerDetailsDto));
+        }
+
+        [Fact]
+        public void GivenCorrectIdWhenRetrievingCustomerReturnTypeMustBeCustomerDetailsDto()
+        {
+            var customerService = new CustomerService();
+
+            var customer = customerService.GetCustomerDetails(CustomerData.CustomerIdGuid);
+
+            customer.Should().NotBeNull();
+            customer.Should().BeOfType(typeof(CustomerDetailsDto));
         }
     }
 }
