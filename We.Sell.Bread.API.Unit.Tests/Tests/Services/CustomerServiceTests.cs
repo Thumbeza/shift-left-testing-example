@@ -78,6 +78,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
         public void GivenCorrectDetailsWhenAddingNewCustomerNewRecordMustBeCreated()
         {
             var customerService = new CustomerService();
+
             var customerName = Faker.Name.FullName();
             var contactNo = Faker.Phone.Number();
             var emailAddress = Faker.Internet.Email();

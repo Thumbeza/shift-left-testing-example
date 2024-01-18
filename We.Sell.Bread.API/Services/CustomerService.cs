@@ -13,6 +13,8 @@ namespace We.Sell.Bread.API.Services
             Validate.NullOrEmptyArgument(emailAddress);
             Validate.NullOrEmptyArgument(physicalAddress);
 
+            Validate.ArgumentType(customerName, typeof(string));
+
             var id = Guid.NewGuid();
 
             return new CustomerDetailsDto(id, customerName, contactNo, emailAddress, physicalAddress);
@@ -27,6 +29,11 @@ namespace We.Sell.Bread.API.Services
             var physicalAddress = Faker.Address.City();
 
             return new CustomerDetailsDto(id, customerName, contactNo, emailAddress, physicalAddress);
+        }
+
+        public IEnumerable<CustomerDetailsDto> GetCustomers()
+        {
+            throw new NotImplementedException();
         }
     }
 }
