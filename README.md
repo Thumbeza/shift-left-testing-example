@@ -2,9 +2,9 @@
 The purpose of this prrojeect is to demonstrate how software engineering teams can implement a shift-left testing approach to ensure effective and early testing for their software. The main of shift-left testing is to identify and resolve bugs as early as possible in the SDLC, hence its core implementation is about shifting testing activities to earlier stages of the ci/cd pipeline, thus enabling an early feedback loop to software quality. Below are the details on how to implement and enforce this process:
 
 # Application in Test
-* **We.Sell.Bread.Domain** - This is the core project where all the common elements of the application will reside. This speaks to interfaces, exceptions, entities and base functionality to be utalised by the API and Infrastructure projects.
+* **We.Sell.Bread.Core** - This is the core project where all the common elements of the application will reside. This speaks to interfaces, exceptions, DTOs and base functionality to be utalised by the API and Infrastructure projects.
 * **We.Sell.Bread.infrastructure** - This project is responsible for processing database transactions. It houses the implementation of the repository pattern and managing the BD context.
-* **We.Sell.Bread.API** - This is an api project for selling bread business case. All the business logic and api endpoints that exposes functionality to the users will reside within this project.
+* **We.Sell.Bread.API** - This is an api project for selling bread business case. All the business logic (services and facade) and api endpoints (controllers) that exposes functionality to the users will reside within this project.
 * **We.Sell.Bread.API.Unit.Tests** - This is the unit test project that the software engineers must use to test the smallest modules of code, and ensure that they work as expected at the smallest unit.
 * **We.Sell.Bread.API.Integration.Tests** - This project houses both the tests for different api endpoint calls and the integration between the different api components.
 
