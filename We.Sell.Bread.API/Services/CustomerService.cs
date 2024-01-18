@@ -44,5 +44,11 @@ namespace We.Sell.Bread.API.Services
         {
             return _customerRepository.GetAllCustomers();
         }
+
+        public bool DeleteCustomerDetails(Guid id)
+        {
+          
+            return true;
+        }
     }
 }
