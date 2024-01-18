@@ -1,4 +1,5 @@
-﻿using We.Sell.Bread.API.Services;
+﻿using System.Net;
+using We.Sell.Bread.API.Services;
 using We.Sell.Bread.Core.DTOs.Customer;
 
 namespace We.Sell.Bread.API.Controllers;
@@ -75,5 +76,29 @@ public class CustomerController : ControllerBase
         _logger.LogInformation("All customers have been retrieved");
 
         return customers.Count == 0 ? NotFound($"No customers were found.") : customers;
+    }
+
+    [HttpDelete(Name ="DeleteCustomer")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
+    public ActionResult DeleteCustomer(string customerId) 
+    {
+
+        _logger.LogInformation($"Deleting customer details by Id: {customerId}");
+
+        var isValid = Guid.TryParse(customerId, out _);
+
+        if (!isValid)
+        {
+            return BadRequest($"Customer Id: '{customerId}' is not a valid Guid.");
+        }
+
+        var IsdeletionSuccessful = _customerService.DeleteCustomerDetails(new Guid(customerId));
+
+        _logger.LogInformation($"A customer with Id: '{customerId}' has been deleted");
+
+        return IsdeletionSuccessful == false ? NotFound() : StatusCode((int)HttpStatusCode.NoContent);
     }
 }
