@@ -72,5 +72,27 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
             //response.StatusCode.Should().Be(HttpStatusCode.OK);
             //response.Content.Should().Be($"Customer Id: '{customerId}' is not a valid Guid.");
         }
+
+        [Fact]
+        public void GivenCorrectIdWhenDeletingCustomerReturnTypeMustBeOfNoContentObjectResult()
+        {
+            var customerId = Guid.NewGuid().ToString();
+
+            var customer = _controller.DeleteCustomer(customerId);
+
+            customer.Should().NotBeNull();
+            customer.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public void GivenInCorrectIdWhenDeletingCustomerReturnTypeMustBeOfBadRequestObjectResult()
+        {
+            var customerId = string.Empty;
+
+            var customer = _controller.DeleteCustomer(customerId);
+
+            customer.Should().NotBeNull();
+            customer.Should().BeOfType<BadRequestObjectResult>();
+        }
     }
 }
