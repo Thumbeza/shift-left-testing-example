@@ -50,6 +50,28 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
             customer.Should().NotBeNull();
             customer.Should().BeOfType(typeof(ActionResult<List<CustomerDetailsDto>>));
         }
+
+        [Fact]
+        public void GivenCorrectIdWhenDeletingCustomerReturnTypeMustBeOfNoContentObjectResult()
+        {
+            var customerId = Guid.NewGuid().ToString();
+
+            var customer = _controller.DeleteCustomer(customerId);
+
+            customer.Should().NotBeNull();
+            customer.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public void GivenInCorrectIdWhenDeletingCustomerReturnTypeMustBeOfBadRequestObjectResult()
+        {
+            var customerId = string.Empty;
+
+            var customer = _controller.DeleteCustomer(customerId);
+
+            customer.Should().NotBeNull();
+            customer.Should().BeOfType<BadRequestObjectResult>();
+        }
     }
 
 
