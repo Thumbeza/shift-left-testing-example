@@ -1,0 +1,16 @@
+[
+  {
+    "Id": "c5bdc894-fa8e-47ea-b542-eff2fg4e7cb",
+    "CustomerName": "Test User",
+    "ContactNo": "+27787653492",
+    "EmailAddress": "test.user@blaze.com",
+    "PhysicalAddress": "Burban"
+  },
+  {
+    "Id": "ad2d2d6c-04fd-48c9-a287-fa33aa197053",
+    "CustomerName": "Menzi Sthole",
+    "ContactNo": "+27794562861",
+    "EmailAddress": "menzi.sthole@yahoo.com",
+    "PhysicalAddress": "Cape Town"
+  }
+]
