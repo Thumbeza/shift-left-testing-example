@@ -5,53 +5,46 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
 {
     public class CustomerControllerTests
     {
-        private const string _baseUrl = "https://localhost";
         private readonly HttpClient _httpClient;
         public CustomerControllerTests() 
         {
-            var webApplicationFactory = new WebApplicationFactory<Program>()
-                .WithWebHostBuilder(builder => 
-                {
-                    builder.ConfigureServices(services => { });
-                });
-
-            _httpClient = webApplicationFactory.CreateClient(new() {BaseAddress = new Uri(_baseUrl)});
+            var webApplicationFactory = new WebApplicationFactory<Program>();
+            _httpClient = webApplicationFactory.CreateDefaultClient();
         }
 
         [Fact]
         public async Task GivenCorrectCustomerIdWhenRetrievingCustomerReturnOkStatusCodeAndCustomerDetails()
         {
-            //var customerId = "ad3d2d6c-02fd-48c9-a287-fa33aa197053";
+            var customerId = "ad3d2d6c-02fd-48c9-a287-fa33aa197053";
 
-            //var response = await _httpClient.GetAsync($"/Customer/GetById/{customerId}");
-
-
-            ////response.IsSuccessStatusCode.Should().BeTrue();
-            //response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response = await _httpClient.GetAsync($"/Customer/GetById/{customerId}");
 
             //var result = await response.Content.ReadAsStringAsync();
+
+            response.IsSuccessStatusCode.Should().BeTrue();
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Fact]
         public async Task GivenInCorrectCustomerIdWhenRetrievingCustomerReturnNotFoundStatusCodeAndCustomerDetails()
         {
-            //var incorrectCustomerId = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
+            var incorrectCustomerId = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
 
-            //var response = await _httpClient.GetAsync($"/Customer/GetById/{incorrectCustomerId}");
+            var response = await _httpClient.GetAsync($"/Customer/GetById/{incorrectCustomerId}");
 
-            //response.IsSuccessStatusCode.Should().BeFalse();
-            //response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            response.IsSuccessStatusCode.Should().BeFalse();
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
         public async Task GivenInvalidCustomerIdWhenRetrievingCustomerReturnBadRequestStatusCodeAsync()
         {
-            //var customerId = "3fa85f64";
+            var customerId = "3fa85f64";
 
-            //var response = await _httpClient.GetAsync($"/Customer/GetById/{customerId}");
+            var response = await _httpClient.GetAsync($"/Customer/GetById/{customerId}");
 
-            //response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            //response.Content.Should().Be($"Customer Id: '{customerId}' is not a valid Guid.");
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.Content.Should().Be($"Customer Id: '{customerId}' is not a valid Guid.");
         }
 
         [Fact]
