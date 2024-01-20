@@ -1,3 +1,7 @@
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("We.Sell.Bread.API.Integration.Tests")]
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -27,3 +31,4 @@ app.MapControllers();
 app.Run();
 
 public partial class Program { }
+

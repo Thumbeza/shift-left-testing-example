@@ -1,4 +1,5 @@
-﻿using We.Sell.Bread.Core.DTOs.Customer;
+﻿using System.Reflection;
+using We.Sell.Bread.Core.DTOs.Customer;
 using We.Sell.Bread.Core.Interfaces;
 using We.Sell.Bread.Infrastructure.Helpers;
 
@@ -7,7 +8,8 @@ namespace We.Sell.Bread.Infrastructure.Repository
     public class CustomerRepository : ICustomerRepository
     {
         //need to change tp relative path
-        private const string _customerFilePath = "C:\\dev\\shift-left-testing-example\\We.Sell.Bread.Infrastructure\\DataFiles\\Customer.json";
+        private string _customerFilePath = Path.GetFullPath("DataFiles/Customer.json");
+        //"C:\\Users\\kwanele.nzimande\\Documents\\POC\\shift-left-testing-example\\We.Sell.Bread.Infrastructure\\DataFiles\\Customer.json";
 
         public CustomerDetailsDto CreateCustomer(NewCustomerDto entity)
         {
