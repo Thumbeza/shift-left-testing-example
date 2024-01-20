@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
-using We.Sell.Bread.API.Controllers;
 
 namespace We.Sell.Bread.API.Unit.Tests.Tests
 {

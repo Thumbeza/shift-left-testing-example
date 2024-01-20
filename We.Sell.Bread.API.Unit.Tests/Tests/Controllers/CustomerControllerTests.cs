@@ -3,6 +3,8 @@ using We.Sell.Bread.API.Unit.Tests.TestData;
 
 namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
 {
+    //only test happy paths for Controller unit tests
+    //All validation and negative tests can be covered by the service tests and API integration tests
     public class CustomerControllerTests : IClassFixture<BaseFixture>
     {
         private readonly BaseFixture _fixture;
@@ -38,6 +40,15 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
 
             customer.Should().NotBeNull();
             customer.Should().BeOfType(typeof(ActionResult<CustomerDetailsDto>));
+        }
+
+        [Fact]
+        public void GivenDataExistsWhenRetrievingCustomersReturnTypeMustBeListCustomerDetailsDtoActionResults()
+        {
+            var customer = _controller.GetAll();
+
+            customer.Should().NotBeNull();
+            customer.Should().BeOfType(typeof(ActionResult<List<CustomerDetailsDto>>));
         }
     }
 

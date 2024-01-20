@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Faker.Net" Version="2.0.154" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\We.Sell.Bread.Core\We.Sell.Bread.Core.csproj" />
+    <ProjectReference Include="..\We.Sell.Bread.Infrastructure\We.Sell.Bread.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
