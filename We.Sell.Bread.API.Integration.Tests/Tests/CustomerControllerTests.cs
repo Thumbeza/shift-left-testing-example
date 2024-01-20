@@ -5,11 +5,17 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
 {
     public class CustomerControllerTests
     {
+        private const string _baseUrl = "https://localhost";
         private readonly HttpClient _httpClient;
         public CustomerControllerTests() 
         {
-            var webApplicationFactory = new WebApplicationFactory<Program>();
-            _httpClient = webApplicationFactory.CreateDefaultClient();
+            var webApplicationFactory = new WebApplicationFactory<Program>()
+                .WithWebHostBuilder(builder => 
+                {
+                    builder.ConfigureServices(services => { });
+                });
+
+            _httpClient = webApplicationFactory.CreateClient(new() {BaseAddress = new Uri(_baseUrl)});
         }
 
         [Fact]
@@ -19,10 +25,11 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
 
             var response = await _httpClient.GetAsync($"/Customer/GetById/{customerId}");
 
-            //var result = await response.Content.ReadAsStringAsync();
 
-            response.IsSuccessStatusCode.Should().BeTrue();
+            //response.IsSuccessStatusCode.Should().BeTrue();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var result = await response.Content.ReadAsStringAsync();
         }
 
         [Fact]
