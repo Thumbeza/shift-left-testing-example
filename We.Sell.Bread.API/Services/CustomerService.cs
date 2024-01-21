@@ -23,11 +23,11 @@ namespace We.Sell.Bread.API.Services
 
             Validate.ArgumentType(customerName, typeof(string));
 
-            var id = Guid.NewGuid();
+            var cus = new NewCustomerDto(customerName,contactNo,emailAddress,physicalAddress);
 
-            //write to file
+            var customer = _customerRepository.CreateCustomer(cus);
 
-            return new CustomerDetailsDto(id, customerName, contactNo, emailAddress, physicalAddress);
+            return customer !=null ? customer : null;
         }
 
         public CustomerDetailsDto? GetCustomerDetails(Guid id)
@@ -47,9 +47,11 @@ namespace We.Sell.Bread.API.Services
 
         public bool DeleteCustomerDetails(Guid id)
         {
-            // This is a placeholder; you would typically interact with a database or data source.
+            Validate.NullOrEmptyArgument(id.ToString());
 
-            return true;
+            var customer = _customerRepository.DeleteCustomer(id.ToString());
+
+            return customer != null ? customer : false;
         }
     }
 }

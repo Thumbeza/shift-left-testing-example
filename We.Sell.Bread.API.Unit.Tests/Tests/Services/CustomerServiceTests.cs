@@ -129,5 +129,31 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             customer.Should().NotBeNull();
             customer.Should().BeOfType(typeof(List<CustomerDetailsDto>));
         }
+
+        [Fact]
+        public void GivenEmptyIdWhenDeletingCustomerMustThrowFormatException()
+        {
+            var emptyId = string.Empty;
+
+            var customer = () => _customerService.DeleteCustomerDetails(new Guid(emptyId));
+
+            customer.Should().Throw<FormatException>().WithMessage("Unrecognized Guid format.");
+        }
+
+        [Fact]
+        public void GivenIncorrectIdWhenDeletingCustomerReturnTypeMustBeNull()
+        {
+            var customer = _customerService.DeleteCustomerDetails(Guid.NewGuid());
+
+            customer.Should().BeFalse();
+        }
+
+        [Fact]
+        public void GivenCorrectIdWhenDeletingCustomerReturnTypeMustBeBoolionOfTrue()
+        {
+            var customer = _customerService.DeleteCustomerDetails(CustomerData.DeleteCustomerIdGuid);
+
+            customer.Should().BeTrue();
+        }
     }
 }
