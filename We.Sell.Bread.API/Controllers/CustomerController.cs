@@ -18,10 +18,9 @@ public class CustomerController : ControllerBase
         _customerService = new CustomerService();
     }
 
-    [Route("ping")]
-    [HttpGet]
+    [HttpGet(Name = "PingCustomer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<string> Ping()
+    public ActionResult<string> HealthCheck()
     {
         return Ok("pong");
     }

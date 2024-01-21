@@ -6,6 +6,8 @@ namespace We.Sell.Bread.Infrastructure.Tests.Tests.Helpers
 {
     public class JsonHelperTests
     {
+        private static string _path => Path.GetFullPath("../../../../We.Sell.Bread.Infrastructure.Tests/TestData/JsonHelper/testingFile.json");
+
         [Fact]
         public void GivenEmptyPathWhenReadingJsonFilleThrowArgumentENullxception() 
         { 
@@ -29,11 +31,7 @@ namespace We.Sell.Bread.Infrastructure.Tests.Tests.Helpers
         [Fact]
         public void GivenValidPathWhenReadingJsonFilleReturnSomeData()
         {
-            //Need to chnage this to relative path.
-            var path = "../We.Sell.Bread.Infrastructure.Tests/TestData/JsonHelper/testingFile.json";
-            //C:\Users\kwanele.nzimande\Documents\POC\shift-left-testing-example\We.Sell.Bread.Infrastructure.Tests\TestData\JsonHelper\testingFile.json
-
-            var result = JsonHelper.ReadJsonFile(path);
+            var result = JsonHelper.ReadJsonFile(_path);
 
             result.Should().NotBeNull();
         }
@@ -61,10 +59,7 @@ namespace We.Sell.Bread.Infrastructure.Tests.Tests.Helpers
         [Fact]
         public void GivenCorrectStringObjectWhenDeserializingToDataModelReturnSomeData()
         {
-            //Need to chnage this to relative path.
-            var path = "C:\\Users\\kwanele.nzimande\\Documents\\POC\\shift-left-testing-example\\We.Sell.Bread.Infrastructure.Tests\\TestData\\JsonHelper\\testingFile.json";
-          
-            var stringObject = JsonHelper.ReadJsonFile(path);
+            var stringObject = JsonHelper.ReadJsonFile(_path);
 
             var result = JsonHelper.Deserialize<IEnumerable<CustomerDetailsDto>>(stringObject);
 
