@@ -52,22 +52,29 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
         }
 
         [Fact]
-        public void GivenCorrectIdWhenDeletingCustomerReturnTypeMustBeOfNoContentObjectResult()
+        public void GivenCorrectIdWhenDeletingCustomerReturnTypeMustBeOfNoContentResult()
         {
-            var customerId = Guid.NewGuid().ToString();
-
-            var customer = _controller.DeleteCustomer(customerId);
+            var customer = _controller.DeleteCustomer(CustomerData.DeleteCustomerIdString);
 
             customer.Should().NotBeNull();
             customer.Should().BeOfType<NoContentResult>();
         }
 
         [Fact]
-        public void GivenInCorrectIdWhenDeletingCustomerReturnTypeMustBeOfBadRequestObjectResult()
+        public void GivenInCorrectIdWhenDeletingCustomerReturnTypeMustBeOfNotFoundResult()
         {
-            var customerId = string.Empty;
+            var customer = _controller.DeleteCustomer(CustomerData.IncorrectCustomerIdString);
 
-            var customer = _controller.DeleteCustomer(customerId);
+            customer.Should().NotBeNull();
+            customer.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public void GivenEmptyIdWhenDeletingCustomerReturnTypeMustBeOfBadRequestResult()
+        {
+            var emptyId = string.Empty;
+
+            var customer = _controller.DeleteCustomer(emptyId);
 
             customer.Should().NotBeNull();
             customer.Should().BeOfType<BadRequestObjectResult>();

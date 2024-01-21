@@ -1,4 +1,5 @@
-﻿using We.Sell.Bread.Core.DTOs.Customer;
+﻿using Newtonsoft.Json;
+using We.Sell.Bread.Core.DTOs.Customer;
 using We.Sell.Bread.Core.Interfaces;
 using We.Sell.Bread.Infrastructure.Helpers;
 
@@ -18,7 +19,25 @@ namespace We.Sell.Bread.Infrastructure.Repository
 
         public CustomerDetailsDto CreateCustomer(NewCustomerDto entity)
         {
-            throw new NotImplementedException();
+            var customerJson = JsonHelper.ReadJsonFile(_customerFilePath);
+
+            var customers = JsonHelper.Deserialize<List<CustomerDetailsDto>>(customerJson);
+
+            var newCustomer = new CustomerDetailsDto(new Guid(), entity.CustomerName, entity.ContactNo, entity.EmailAddress, entity.PhysicalAddress)
+            {
+                Id = Guid.NewGuid(),
+                CustomerName = entity.CustomerName,
+                ContactNo = entity.ContactNo,
+                EmailAddress = entity.EmailAddress,
+                PhysicalAddress = entity.PhysicalAddress,
+            };
+             
+            customers.Add(newCustomer);
+
+            var updatedJsonContent = JsonConvert.SerializeObject(customers, Formatting.Indented);
+            File.WriteAllText(_customerFilePath, updatedJsonContent);
+
+            return newCustomer;
         }
 
         public IEnumerable<CustomerDetailsDto> GetAllCustomers()
@@ -48,7 +67,22 @@ namespace We.Sell.Bread.Infrastructure.Repository
 
         public bool DeleteCustomer(string customerId)
         {
-            throw new NotImplementedException();
+            var customerJson = JsonHelper.ReadJsonFile(_customerFilePath);
+
+            var customers = JsonHelper.Deserialize<List<CustomerDetailsDto>>(customerJson);
+
+            var customerToRemove = customers.FirstOrDefault(Cus => Cus.Id.ToString() == customerId);
+
+            if(customerToRemove != null)
+            {
+                customers.Remove(customerToRemove);
+
+                var updatedJsonContent = JsonConvert.SerializeObject(customers, Formatting.Indented);
+                File.WriteAllText(_customerFilePath, updatedJsonContent);
+
+                return true;
+            }
+            else { return false; }
         }
     }
 }
