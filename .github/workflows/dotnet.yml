@@ -31,6 +31,7 @@ jobs:
     # Run unit tests and collect code coverage
     - name: Run Unit Tests
       run: dotnet test We.Sell.Bread.API.Unit.Tests/We.Sell.Bread.API.Unit.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
+      run: dotnet test We.Sell.Bread.Infrastructure.Tests/We.Sell.Bread.Infrastructure.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
 
     # Run Integration tests and collect code coverage
     - name: Run Integration Tests
