@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <None Update="DataFiles\Customer.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
