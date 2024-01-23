@@ -20,4 +20,8 @@
     <ProjectReference Include="..\We.Sell.Bread.Infrastructure\We.Sell.Bread.Infrastructure.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="..\We.Sell.Bread.API.Intagration.Tests\We.Sell.Bread.API.Intagration.Tests.csproj" />
+	</ItemGroup>
+
 </Project>

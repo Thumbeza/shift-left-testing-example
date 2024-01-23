@@ -1,21 +1,23 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc.Testing;
+using We.Sell.Bread.API.Integration.Tests.Utilities;
 
 namespace We.Sell.Bread.API.Integration.Tests.Tests
 {
-    public class CustomerControllerTests
+    public class CustomerControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
     {
-        private const string _baseUrl = "https://localhost";
+        private readonly WebApplicationFactory<Program> _factory;
         private readonly HttpClient _httpClient;
-        public CustomerControllerTests() 
-        {
-            var webApplicationFactory = new WebApplicationFactory<Program>()
-                .WithWebHostBuilder(builder => 
-                {
-                    builder.ConfigureServices(services => { });
-                });
 
-            _httpClient = webApplicationFactory.CreateClient(new() {BaseAddress = new Uri(_baseUrl)});
+        public CustomerControllerTests(
+            CustomWebApplicationFactory<Program> factory)
+        {
+            _factory = factory;
+
+            _httpClient = _factory.CreateClient(new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false
+            });
         }
 
         [Fact]
@@ -26,7 +28,7 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
             var response = await _httpClient.GetAsync($"/Customer/GetById/{customerId}");
 
 
-            //response.IsSuccessStatusCode.Should().BeTrue();
+            response.IsSuccessStatusCode.Should().BeTrue();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var result = await response.Content.ReadAsStringAsync();
@@ -55,22 +57,15 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
         }
 
         [Fact]
-        public void GivenCorrectCustomerIdWhenCreatingCustomerReturnOStatusCode()
+        public async Task GivenDataExistWhenRetrievingAllCustomerReturnOkStatusCodeAsync()
         {
-            //using var application = new WebApplicationFactory<Program>();
-            //using var client = application.CreateClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, "/Customer/GetAllCustomers");
 
-            //var name = Faker.Name.FullName();
-            //var phuneNumber = Faker.Phone.Number();
-            //var email = Faker.Internet.Email();
-            //var address = Faker.Address.City();
+            var response = await _httpClient.SendAsync(request);
 
-            //var requestContent = new NewCustomerDto(name, phuneNumber, email, address);
+            //var response = await _httpClient.GetAsync("/Customer/GetAllCustomers");
 
-            //var response = client.PostAsync("/Customer/Post", JsonHelper.Serialize(requestContent));
-
-            //response.StatusCode.Should().Be(HttpStatusCode.OK);
-            //response.Content.Should().Be($"Customer Id: '{customerId}' is not a valid Guid.");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
        
