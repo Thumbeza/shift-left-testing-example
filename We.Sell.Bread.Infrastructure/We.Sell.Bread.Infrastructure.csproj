@@ -14,10 +14,4 @@
     <ProjectReference Include="..\We.Sell.Bread.Core\We.Sell.Bread.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="DataFiles\Customer.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
