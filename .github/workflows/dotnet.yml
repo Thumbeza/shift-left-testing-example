@@ -32,8 +32,8 @@ jobs:
       run: dotnet build --no-restore
     
     # Run unit tests and collect code coverage
-    # - name: Run API Unit Tests
-    #  run: dotnet test We.Sell.Bread.API.Unit.Tests/We.Sell.Bread.API.Unit.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
+    - name: Run API Unit Tests
+      run: dotnet test We.Sell.Bread.API.Unit.Tests/We.Sell.Bread.API.Unit.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
 
     # Run unit tests and collect code coverage
     - name: Run Infrastructure Unit Tests
