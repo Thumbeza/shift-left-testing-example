@@ -16,10 +16,13 @@ jobs:
     steps:
     # Chechout the repository
     - uses: actions/checkout@v3
+
+    #Install Dotnet 6 SDK
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
+
     # Restore dependencies 
     - name: Restore dependencies
       run: dotnet restore
@@ -29,8 +32,12 @@ jobs:
       run: dotnet build --no-restore
     
     # Run unit tests and collect code coverage
-    - name: Run Unit Tests
+    - name: Run API Unit Tests
       run: dotnet test We.Sell.Bread.API.Unit.Tests/We.Sell.Bread.API.Unit.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
+
+    # Run unit tests and collect code coverage
+    - name: Run Infrastructure Unit Tests
+      run: dotnet test We.Sell.Bread.Infrastructure.Tests/We.Sell.Bread.Infrastructure.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
 
     # Run Integration tests and collect code coverage
     - name: Run Integration Tests

@@ -1,0 +1,30 @@
+﻿[
+  {
+    "Id": "c5bdc894-fa8e-47ea-b542-eff284f4e7cb",
+    "CustomerName": "Marvin Jones",
+    "ContactNo": "+27787653492",
+    "EmailAddress": "marv.jones@blaze.com",
+    "PhysicalAddress": "Burban"
+  },
+  {
+    "Id": "ad3d2d6c-02fd-48c9-a287-fa33aa197053",
+    "CustomerName": "Bheki Sthole",
+    "ContactNo": "+27794562861",
+    "EmailAddress": "bheki.sthole@yahoo.com",
+    "PhysicalAddress": "Joburg"
+  },
+  {
+    "Id": "d1a993e8-398a-4ada-9035-b16d280ba987",
+    "CustomerName": "Mohamed Adbul",
+    "ContactNo": "+91452983492",
+    "EmailAddress": "mohamed.abdul@emirates.com",
+    "PhysicalAddress": "Dubai"
+  },
+  {
+    "Id": "0ff5b45c-bc6e-49bc-a200-1b0ca930386d",
+    "CustomerName": "Sarah Smith",
+    "ContactNo": "+34782945683",
+    "EmailAddress": "sarah.smith@deloitte.com",
+    "PhysicalAddress": "London"
+  }
+]
