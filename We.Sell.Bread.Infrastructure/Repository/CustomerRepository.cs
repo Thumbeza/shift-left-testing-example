@@ -13,7 +13,7 @@ namespace We.Sell.Bread.Infrastructure.Repository
         {
             _basePath = FileHelper.GetBasePath();
 
-            _customerFilePath = $"{_basePath}\\We.Sell.Bread.Infrastructure\\DataFiles\\Customer.json"; ;
+            _customerFilePath = $"{_basePath}/We.Sell.Bread.Infrastructure/DataFiles/Customer.json"; ;
         }
 
         public CustomerDetailsDto CreateCustomer(NewCustomerDto entity)
