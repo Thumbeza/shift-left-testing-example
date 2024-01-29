@@ -4,9 +4,9 @@ namespace We.Sell.Bread.Core.Interfaces
 {
     public interface ICustomerService
     {
-        CustomerDetailsDto AddNewCustomer(string customerName, string contactNo, string emailAddress, string physicalAddress);
-        CustomerDetailsDto GetCustomerDetails(Guid id);
-
+        Task<CustomerDetailsDto> AddNewCustomerAsync(string customerName, string contactNo, string emailAddress, string physicalAddress);
+        CustomerDetailsDto GetCustomer(Guid id);
+        Task<bool> DeleteCustomerAsync(Guid id);
         IEnumerable<CustomerDetailsDto> GetAllCustomers();
     }
 }

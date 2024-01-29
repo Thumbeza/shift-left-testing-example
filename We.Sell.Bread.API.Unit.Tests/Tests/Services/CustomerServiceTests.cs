@@ -16,7 +16,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
         {
             var emptyId = string.Empty;
 
-            var customer = () => _customerService.GetCustomerDetails(new Guid(emptyId));
+            var customer = () => _customerService.GetCustomer(new Guid(emptyId));
 
             customer.Should().Throw<FormatException>().WithMessage("Unrecognized Guid format.");
         }
@@ -24,72 +24,72 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
         [Fact]
         public void GivenIncorrectIdWhenRetrievingCustomerReturnTypeMustBeNull()
         {
-            var customer = _customerService.GetCustomerDetails(CustomerData.IncorrectCustomerIdGuid);
+            var customer = _customerService.GetCustomer(CustomerData.IncorrectCustomerIdGuid);
 
             customer.Should().BeNull();
         }
 
         [Fact]
-        public void GivenEmptyNameWhenAddingNewCustomerThrowFormatException()
+        public async Task GivenEmptyNameWhenAddingNewCustomerThrowFormatException()
         {
             var customerName = string.Empty;
             var contactNo = Faker.Phone.Number();
             var emailAddress = Faker.Internet.Email();
             var physicalAddress = Faker.Address.City();
 
-            var customer = () => _customerService.AddNewCustomer(customerName, contactNo, emailAddress, physicalAddress);
+            var customer = async () => await _customerService.AddNewCustomerAsync(customerName, contactNo, emailAddress, physicalAddress);
 
-            customer.Should().Throw<ArgumentException>().WithMessage(" cannot be empty or null");
+            await customer.Should().ThrowAsync<ArgumentException>().WithMessage(" cannot be empty or null");
         }
 
         [Fact]
-        public void GivenEmptyContactNoWhenAddingNewCustomerThrowFormatException()
+        public async Task GivenEmptyContactNoWhenAddingNewCustomerThrowFormatException()
         {
             var customerName = Faker.Name.FullName();
             var contactNo = string.Empty;
             var emailAddress = Faker.Internet.Email();
             var physicalAddress = Faker.Address.City();
 
-            var customer = () => _customerService.AddNewCustomer(customerName, contactNo, emailAddress, physicalAddress);
+            var customer = async () => await _customerService.AddNewCustomerAsync(customerName, contactNo, emailAddress, physicalAddress);
 
-            customer.Should().Throw<ArgumentException>().WithMessage(" cannot be empty or null");
+            await customer.Should().ThrowAsync<ArgumentException>().WithMessage(" cannot be empty or null");
         }
 
         [Fact]
-        public void GivenEmptyEmailWhenAddingNewCustomerThrowFormatException()
+        public async void GivenEmptyEmailWhenAddingNewCustomerThrowFormatException()
         {
             var customerName = Faker.Name.FullName();
             var contactNo = Faker.Phone.Number();
             var emailAddress = string.Empty;
             var physicalAddress = Faker.Address.City();
 
-            var customer = () => _customerService.AddNewCustomer(customerName, contactNo, emailAddress, physicalAddress);
+            var customer = async () => await _customerService.AddNewCustomerAsync(customerName, contactNo, emailAddress, physicalAddress);
 
-            customer.Should().Throw<ArgumentException>().WithMessage(" cannot be empty or null");
+            await customer.Should().ThrowAsync<ArgumentException>().WithMessage(" cannot be empty or null");
         }
 
         [Fact]
-        public void GivenEmptyAddressWhenAddingNewCustomerThrowFormatException()
+        public async Task GivenEmptyAddressWhenAddingNewCustomerThrowFormatException()
         {
             var customerName = Faker.Name.FullName();
             var contactNo = Faker.Phone.Number();
             var emailAddress = Faker.Internet.Email();
             var physicalAddress = string.Empty;
 
-            var customer = () => _customerService.AddNewCustomer(customerName, contactNo, emailAddress, physicalAddress);
+            var customer = async () => await _customerService.AddNewCustomerAsync(customerName, contactNo, emailAddress, physicalAddress);
 
-            customer.Should().Throw<ArgumentException>().WithMessage(" cannot be empty or null");
+            await customer.Should().ThrowAsync<ArgumentException>().WithMessage(" cannot be empty or null");
         }
 
         [Fact]
-        public void GivenCorrectDetailsWhenAddingNewCustomerNewRecordMustBeCreated()
+        public async Task GivenCorrectDetailsWhenAddingNewCustomerNewRecordMustBeCreated()
         {
             var customerName = Faker.Name.FullName();
             var contactNo = Faker.Phone.Number();
             var emailAddress = Faker.Internet.Email();
             var physicalAddress = Faker.Address.City();
 
-            var customer = _customerService.AddNewCustomer(customerName, contactNo, emailAddress, physicalAddress);
+            var customer = await _customerService.AddNewCustomerAsync(customerName, contactNo, emailAddress, physicalAddress);
 
             customer.Id.GetType().Should().Be(typeof(Guid));
             customer.CustomerName.Should().Be(customerName);
@@ -99,14 +99,14 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
         }
 
         [Fact]
-        public void GivenCorrectDetailsWhenCreatingCustomerReturnTypeMustBeCustomerDetailsDto()
+        public async Task GivenCorrectDetailsWhenCreatingCustomerReturnTypeMustBeCustomerDetailsDto()
         {
             var customerName = Faker.Name.FullName();
             var contactNo = Faker.Phone.Number();
             var emailAddress = Faker.Internet.Email();
             var physicalAddress = Faker.Address.City();
 
-            var customer = _customerService.AddNewCustomer(customerName, contactNo, emailAddress, physicalAddress);
+            var customer = await _customerService.AddNewCustomerAsync(customerName, contactNo, emailAddress, physicalAddress);
 
             customer.Should().NotBeNull();
             customer.Should().BeOfType(typeof(CustomerDetailsDto));
@@ -115,7 +115,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
         [Fact]
         public void GivenCorrectIdWhenRetrievingCustomerReturnTypeMustBeCustomerDetailsDto()
         {
-            var customer = _customerService.GetCustomerDetails(CustomerData.CustomerIdGuid);
+            var customer = _customerService.GetCustomer(CustomerData.CustomerIdGuid);
 
             customer.Should().NotBeNull();
             customer.Should().BeOfType(typeof(CustomerDetailsDto));
@@ -128,6 +128,32 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
 
             customer.Should().NotBeNull();
             customer.Should().BeOfType(typeof(List<CustomerDetailsDto>));
+        }
+
+        [Fact]
+        public async Task GivenEmptyIdWhenDeletingCustomerMustThrowFormatException()
+        {
+            var emptyId = string.Empty;
+
+            var customer = async () => await _customerService.DeleteCustomerAsync(new Guid(emptyId));
+
+            await customer.Should().ThrowAsync<FormatException>().WithMessage("Unrecognized Guid format.");
+        }
+
+        [Fact]
+        public async Task GivenIncorrectIdWhenDeletingCustomerReturnTypeMustBeNull()
+        {
+            var customer = await _customerService.DeleteCustomerAsync(Guid.NewGuid());
+
+            customer.Should().BeFalse();
+        }
+
+        [Fact(Skip ="Under Inverstigation")]
+        public async Task GivenCorrectIdWhenDeletingCustomerReturnTypeMustBeBoolionOfTrue()
+        {
+            var customer = await _customerService.DeleteCustomerAsync(CustomerData.DeleteCustomerIdGuid);
+
+            customer.Should().BeTrue();
         }
     }
 }

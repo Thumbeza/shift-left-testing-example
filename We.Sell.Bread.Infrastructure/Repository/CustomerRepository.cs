@@ -1,4 +1,5 @@
-﻿using We.Sell.Bread.Core.DTOs.Customer;
+﻿using Newtonsoft.Json;
+using We.Sell.Bread.Core.DTOs.Customer;
 using We.Sell.Bread.Core.Interfaces;
 using We.Sell.Bread.Infrastructure.Helpers;
 
@@ -16,9 +17,27 @@ namespace We.Sell.Bread.Infrastructure.Repository
             _customerFilePath = $"{_basePath}/We.Sell.Bread.Infrastructure/DataFiles/Customer.json"; ;
         }
 
-        public CustomerDetailsDto CreateCustomer(NewCustomerDto entity)
+        public async Task<CustomerDetailsDto> CreateCustomerAsync(NewCustomerDto entity)
         {
-            throw new NotImplementedException();
+           var customerJson = JsonHelper.ReadJsonFile(_customerFilePath);
+
+           var customers = JsonHelper.Deserialize<List<CustomerDetailsDto>>(customerJson);
+
+            var newCustomer = new CustomerDetailsDto(new Guid(), entity.CustomerName, entity.ContactNo, entity.EmailAddress, entity.PhysicalAddress)
+            {
+                Id = Guid.NewGuid(),
+                CustomerName = entity.CustomerName,
+                ContactNo = entity.ContactNo,
+                EmailAddress = entity.EmailAddress,
+                PhysicalAddress = entity.PhysicalAddress,
+            };
+             
+           customers.Add(newCustomer);
+
+
+           await JsonHelper.StreamWriteAsync(customers, _customerFilePath);
+
+            return newCustomer;
         }
 
         public IEnumerable<CustomerDetailsDto> GetAllCustomers()
@@ -46,9 +65,23 @@ namespace We.Sell.Bread.Infrastructure.Repository
             throw new NotImplementedException();
         }
 
-        public bool DeleteCustomer(string customerId)
+        public async Task<bool> DeleteCustomerAsync(string customerId)
         {
-            throw new NotImplementedException();
+            var customerJson = JsonHelper.ReadJsonFile(_customerFilePath);
+
+            var customers = JsonHelper.Deserialize<List<CustomerDetailsDto>>(customerJson);
+
+            var customerToRemove = customers.FirstOrDefault(Cus => Cus.Id.ToString() == customerId);
+
+            if(customerToRemove != null)
+            {
+                customers.Remove(customerToRemove);
+
+               await JsonHelper.StreamWriteAsync(customers, _customerFilePath);
+
+                return true;
+            }
+            else { return false; }
         }
     }
 }
