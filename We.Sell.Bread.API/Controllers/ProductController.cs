@@ -25,6 +25,18 @@ public class ProductController : ControllerBase
         return Ok("Product Is ALive");
     }
 
+    [HttpPost(Name = "CreateProduct")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ProductDetailsDto>> PostAsync(NewProductDto product)
+    {
+        _logger.LogInformation($"Attempting to create a neew product: {product.ProductName}");
+
+        var productDetails = await _productService.AddNewProductAsync(product.ProductName, product.Price, product.Description, product.StockQuantity);
+
+        return productDetails == null ? BadRequest("One or more product details were invalid") : productDetails;
+    }
+
     [HttpGet(Name = "GetProductById")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

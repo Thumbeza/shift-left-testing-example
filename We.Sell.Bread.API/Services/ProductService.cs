@@ -14,6 +14,22 @@ namespace We.Sell.Bread.API.Services
             _productRepository = new ProductRepository();
         }
 
+        public async Task<ProductDetailsDto> AddNewProductAsync(string productName, decimal price, string description, int stockQuantity)
+        {
+            Validate.NullOrEmptyArgument(productName);
+            Validate.NullOrEmptyArgument(price.ToString());
+            Validate.NullOrEmptyArgument(description);
+            Validate.NullOrEmptyArgument(stockQuantity.ToString());
+
+            Validate.ArgumentType(productName, typeof(string));
+
+            var prod = new NewProductDto(productName, price, description, stockQuantity);
+
+            var product = await _productRepository.CreateProductAsync(prod);
+
+            return product != null ? product : null;
+        }
+
         public ProductDetailsDto? GetProduct(Guid id)
         {
             Validate.NullOrEmptyArgument(id.ToString());
