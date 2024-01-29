@@ -17,11 +17,11 @@ namespace We.Sell.Bread.Infrastructure.Repository
             _customerFilePath = $"{_basePath}/We.Sell.Bread.Infrastructure/DataFiles/Customer.json"; ;
         }
 
-        public CustomerDetailsDto CreateCustomer(NewCustomerDto entity)
+        public async Task<CustomerDetailsDto> CreateCustomerAsync(NewCustomerDto entity)
         {
-            var customerJson = JsonHelper.ReadJsonFile(_customerFilePath);
+           var customerJson = JsonHelper.ReadJsonFile(_customerFilePath);
 
-            var customers = JsonHelper.Deserialize<List<CustomerDetailsDto>>(customerJson);
+           var customers = JsonHelper.Deserialize<List<CustomerDetailsDto>>(customerJson);
 
             var newCustomer = new CustomerDetailsDto(new Guid(), entity.CustomerName, entity.ContactNo, entity.EmailAddress, entity.PhysicalAddress)
             {
@@ -32,10 +32,10 @@ namespace We.Sell.Bread.Infrastructure.Repository
                 PhysicalAddress = entity.PhysicalAddress,
             };
              
-            customers.Add(newCustomer);
+           customers.Add(newCustomer);
 
-            var updatedJsonContent = JsonConvert.SerializeObject(customers, Formatting.Indented);
-            File.WriteAllText(_customerFilePath, updatedJsonContent);
+
+           await JsonHelper.StreamWriteAsync(customers, _customerFilePath);
 
             return newCustomer;
         }
@@ -65,7 +65,7 @@ namespace We.Sell.Bread.Infrastructure.Repository
             throw new NotImplementedException();
         }
 
-        public bool DeleteCustomer(string customerId)
+        public async Task<bool> DeleteCustomerAsync(string customerId)
         {
             var customerJson = JsonHelper.ReadJsonFile(_customerFilePath);
 
@@ -77,8 +77,7 @@ namespace We.Sell.Bread.Infrastructure.Repository
             {
                 customers.Remove(customerToRemove);
 
-                var updatedJsonContent = JsonConvert.SerializeObject(customers, Formatting.Indented);
-                File.WriteAllText(_customerFilePath, updatedJsonContent);
+               await JsonHelper.StreamWriteAsync(customers, _customerFilePath);
 
                 return true;
             }

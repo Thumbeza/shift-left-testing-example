@@ -14,7 +14,7 @@ namespace We.Sell.Bread.API.Services
             _customerRepository = new CustomerRepository();
         }
 
-        public CustomerDetailsDto AddNewCustomer(string customerName, string contactNo, string emailAddress, string physicalAddress)
+        public async Task<CustomerDetailsDto> AddNewCustomerAsync(string customerName, string contactNo, string emailAddress, string physicalAddress)
         {
             Validate.NullOrEmptyArgument(customerName);
             Validate.NullOrEmptyArgument(contactNo);
@@ -25,12 +25,12 @@ namespace We.Sell.Bread.API.Services
 
             var cus = new NewCustomerDto(customerName,contactNo,emailAddress,physicalAddress);
 
-            var customer = _customerRepository.CreateCustomer(cus);
+            var customer = await _customerRepository.CreateCustomerAsync(cus);
 
             return customer !=null ? customer : null;
         }
 
-        public CustomerDetailsDto? GetCustomerDetails(Guid id)
+        public CustomerDetailsDto? GetCustomer(Guid id)
         {
             Validate.NullOrEmptyArgument(id.ToString());
 
@@ -45,13 +45,13 @@ namespace We.Sell.Bread.API.Services
             return _customerRepository.GetAllCustomers();
         }
 
-        public bool DeleteCustomerDetails(Guid id)
+        public async Task<bool> DeleteCustomerAsync(Guid id)
         {
             Validate.NullOrEmptyArgument(id.ToString());
 
-            var customer = _customerRepository.DeleteCustomer(id.ToString());
+            var customer = await _customerRepository.DeleteCustomerAsync(id.ToString());
 
-            return customer != null ? customer : false;
+            return customer != false ? customer : false;
         }
     }
 }

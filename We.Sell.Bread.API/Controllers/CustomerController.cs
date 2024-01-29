@@ -28,15 +28,13 @@ public class CustomerController : ControllerBase
     [HttpPost(Name = "CreateCustomer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<CustomerDetailsDto> Post(NewCustomerDto customer)
+    public async Task<ActionResult<CustomerDetailsDto>> PostAsync(NewCustomerDto customer)
     {
         _logger.LogInformation($"Attempting to create a neew customer: {customer.CustomerName}");
 
-        var customerDetails = _customerService.AddNewCustomer(customer.CustomerName, customer.ContactNo, customer.EmailAddress, customer.PhysicalAddress);
+         var customerDetails = await _customerService.AddNewCustomerAsync(customer.CustomerName, customer.ContactNo, customer.EmailAddress, customer.PhysicalAddress);
 
-        _logger.LogInformation($"New custormer hase been created: {customerDetails.Id}");
-
-        return customerDetails == null? BadRequest("One or more customer details were invalid") : customerDetails;
+         return customerDetails == null? BadRequest("One or more customer details were invalid") : customerDetails;
     }
 
 
@@ -56,7 +54,7 @@ public class CustomerController : ControllerBase
             return BadRequest($"Customer Id: '{customerId}' is not a valid Guid.");
         }
 
-        var customerDetails = _customerService.GetCustomerDetails(new Guid(customerId));
+        var customerDetails = _customerService.GetCustomer(new Guid(customerId));
 
         _logger.LogInformation($"A customer with Id: '{customerId}' has been retrieved");
 
@@ -81,7 +79,7 @@ public class CustomerController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult DeleteCustomer(string customerId) 
+    public async Task<ActionResult> DeleteCustomerAsync(string customerId) 
     {
 
         _logger.LogInformation($"Deleting customer details by Id: {customerId}");
@@ -93,9 +91,7 @@ public class CustomerController : ControllerBase
             return BadRequest($"Customer Id: '{customerId}' is not a valid Guid.");
         }
 
-        var IsdeletionSuccessful = _customerService.DeleteCustomerDetails(new Guid(customerId));
-
-        _logger.LogInformation($"A customer with Id: '{customerId}' has been deleted");
+        var IsdeletionSuccessful = await _customerService.DeleteCustomerAsync(new Guid(customerId));
 
         return IsdeletionSuccessful == false ? NotFound() : NoContent();
     }

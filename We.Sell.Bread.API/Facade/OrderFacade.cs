@@ -17,7 +17,7 @@ namespace We.Sell.Bread.API.Facade
         public OrderDetailsDto PlaceOrder(Guid customerId)
         {
             //Get customer details
-            var customerDetails = _customer.GetCustomerDetails(customerId);
+            var customerDetails = _customer.GetCustomer(customerId);
 
             //Add items to cart
 
