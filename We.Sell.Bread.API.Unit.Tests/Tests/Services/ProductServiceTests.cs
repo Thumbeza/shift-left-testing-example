@@ -22,6 +22,24 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
            
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         [Fact]
         public void AddingANewProductShouldReturnAProductAndShouldContainTheGivenDetails()
         {
