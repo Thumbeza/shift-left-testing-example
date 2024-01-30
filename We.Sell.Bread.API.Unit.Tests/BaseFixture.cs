@@ -3,18 +3,15 @@ using Moq;
 
 namespace We.Sell.Bread.API.Unit.Tests.Tests
 {
-    public class BaseFixture
-    {
-        public readonly ILogger<CustomerController> Logger;
-        public readonly ILogger<ProductController> iLogger;
+    public class BaseFixture<T>
+    { 
+        public readonly ILogger<T> Logger;
 
         public BaseFixture() 
         {
-            var mock = new Mock<ILogger<CustomerController>>();
-            var imock = new Mock<ILogger<ProductController>>();
+            var mock = new Mock<ILogger<T>>();
 
             Logger = mock.Object;
-            iLogger = imock.Object;
         }
     }
 }
