@@ -19,26 +19,26 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
 
             product.Should().NotBeNull();
             product.Should().BeOfType(typeof(List<ProductDetailsDto>));
-           
+
         }
 
+        [Fact]
+        public void GivenIdShouldExistAndReturnTypeObjectProductDetailsDto()
+        {
+            ProductDetailsDto? product = _productService.GetProduct(new Guid("411fbad3-925e-4044-9269-f962641f9277"));
+            string realName = "Pumpernickel Bread";
+            decimal realPrice = (decimal)20.00;
+            string realDescription = "A dense, dark bread made from coarsely ground whole rye grains";
+            int realStock = 7;
 
+            product.Should().NotBeNull();
+            product.Should().BeOfType(typeof(ProductDetailsDto));
+            Assert.Equal(realName, product.ProductName);
+            Assert.Equal(realPrice, product.Price);
+            Assert.Equal(realDescription, product.Description);
+            Assert.Equal(realStock, product.StockQuantity);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        }
 
         [Fact]
         public void AddingANewProductShouldReturnAProductAndShouldContainTheGivenDetails()
@@ -57,8 +57,8 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             Assert.Equal(price, taskResult.Price);
             taskResult.Description.Should().Contain(description);
             Assert.Equal(stockQuantity, taskResult.StockQuantity);
+
         }
+        
     }
-
-
 }
