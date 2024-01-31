@@ -1,4 +1,5 @@
 ﻿
+using We.Sell.Bread.API.Unit.Tests.TestData;
 using We.Sell.Bread.Core.DTOs.Product;
 
 namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
@@ -19,46 +20,77 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
 
             product.Should().NotBeNull();
             product.Should().BeOfType(typeof(List<ProductDetailsDto>));
-
         }
 
         [Fact]
-        public void GivenIdShouldExistAndReturnTypeObjectProductDetailsDto()
+        public void GivenCorrectIdShouldExistAndReturnTypeObjectProductDetailsDto()
         {
-            ProductDetailsDto? product = _productService.GetProduct(new Guid("411fbad3-925e-4044-9269-f962641f9277"));
-            string realName = "Pumpernickel Bread";
-            decimal realPrice = (decimal)20.00;
-            string realDescription = "A dense, dark bread made from coarsely ground whole rye grains";
-            int realStock = 7;
+            ProductDetailsDto? product = _productService.GetProduct(ProductData.ProductIdGuid);
 
             product.Should().NotBeNull();
             product.Should().BeOfType(typeof(ProductDetailsDto));
-            Assert.Equal(realName, product.ProductName);
-            Assert.Equal(realPrice, product.Price);
-            Assert.Equal(realDescription, product.Description);
-            Assert.Equal(realStock, product.StockQuantity);
-
         }
 
         [Fact]
-        public void AddingANewProductShouldReturnAProductAndShouldContainTheGivenDetails()
+        public void GivenEmptyIdWhenRetrievingProductThrowsFormatException()
         {
-            string productName = "Ciabatta";
-            decimal price = (decimal)35.00;
-            string description = "Ciabatta, derived from the Italian word for slipper, is a type of light and airy bread with a slightly chewy crust.";
-            int stockQuantity = 15;
+            var emptyId = string.Empty;
 
-            Task<ProductDetailsDto> task = _productService.AddNewProductAsync(productName, price, description, stockQuantity);
-            ProductDetailsDto? taskResult = task.Result;
+            var product = () => _productService.GetProduct(new Guid(emptyId));
 
-            taskResult.Should().NotBeNull();
-            taskResult.Should().BeOfType(typeof(ProductDetailsDto));
-            taskResult.ProductName.Should().Contain(productName);
-            Assert.Equal(price, taskResult.Price);
-            taskResult.Description.Should().Contain(description);
-            Assert.Equal(stockQuantity, taskResult.StockQuantity);
-
+            product.Should().Throw<FormatException>().WithMessage("Unrecognized Guid format.");
         }
-        
+
+        [Fact]
+        public void GivenIncorrectIdWhenRetrievingProductReturnTypeMustBeNull()
+        {
+            var product = _productService.GetProduct(ProductData.IncorrectProductIdGuid);
+
+            product.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GivenCorrectDetailsWhenAddingNewProductShouldReturnTypeProductDetailsDto()
+        {
+            var productName = Faker.Lorem.GetFirstWord();
+            var price = Convert.ToDecimal(Faker.RandomNumber.Next(50));
+            var description = Faker.Lorem.Sentence(10);
+            var stockQuantity = Faker.RandomNumber.Next(90);
+
+            var product = await _productService.AddNewProductAsync(productName, price, description, stockQuantity);
+
+            product.Should().NotBeNull();
+            product.Should().BeOfType(typeof(ProductDetailsDto));
+            product.ProductName.Should().Be(productName);
+            product.Price.Should().Be(price);
+            product.Description.Should().Be(description);
+            product.StockQuantity.Should().Be(stockQuantity);
+        }
+
+        [Fact]
+        public async Task GivenEmptyProductNameWhenAddingNewProductThrowFormatException()
+        {
+            var productName = string.Empty;
+            var price = Convert.ToDecimal(Faker.RandomNumber.Next(50));
+            var description = Faker.Lorem.Sentence(10);
+            var stockQuantity = Faker.RandomNumber.Next(90);
+
+            var product = async () => await _productService.AddNewProductAsync(productName, price, description, stockQuantity);
+
+            await product.Should().ThrowAsync<ArgumentException>().WithMessage(" cannot be empty or null");
+        }
+
+        [Fact]
+        public async Task GivenEmptyProductDescriptionWhenAddingNewProductThrowFormatException()
+        {
+            var productName = Faker.Lorem.GetFirstWord();
+            var price = Convert.ToDecimal(Faker.RandomNumber.Next(50));
+            var description = string.Empty;
+            var stockQuantity = Faker.RandomNumber.Next(90);
+
+            var product = async () => await _productService.AddNewProductAsync(productName, price, description, stockQuantity);
+
+            await product.Should().ThrowAsync<ArgumentException>().WithMessage(" cannot be empty or null"); 
+        }
     }
 }
