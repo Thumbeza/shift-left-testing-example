@@ -1,4 +1,5 @@
-﻿using We.Sell.Bread.API.Unit.Tests.TestData;
+﻿using Castle.Core.Resource;
+using We.Sell.Bread.API.Unit.Tests.TestData;
 
 namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
 {
@@ -96,6 +97,8 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             customer.ContactNo.Should().Be(contactNo);
             customer.EmailAddress.Should().Be(emailAddress);
             customer.PhysicalAddress.Should().Be(physicalAddress);
+
+            await _customerService.DeleteCustomerAsync(customer.Id);
         }
 
         [Fact]
@@ -110,6 +113,8 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
 
             customer.Should().NotBeNull();
             customer.Should().BeOfType(typeof(CustomerDetailsDto));
+
+            await _customerService.DeleteCustomerAsync(customer.Id);
         }
 
         [Fact]
@@ -154,6 +159,120 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             var customer = await _customerService.DeleteCustomerAsync(CustomerData.DeleteCustomerIdGuid);
 
             customer.Should().BeTrue();
+        }
+
+        [Fact(Skip = "Awaiting bug #24 to be resolved")]
+        public async void GivenDifferentCustomerDetailWhenUpdatingCustomerDetailsMustBeChanged()
+        {
+            var customerName = Faker.Name.FullName();
+            var contactNo = Faker.Phone.Number();
+            var emailAddress = Faker.Internet.Email();
+            var physicalAddress = Faker.Address.City();
+
+            var testCustomer = await _customerService.AddNewCustomerAsync(customerName, contactNo, emailAddress, physicalAddress);
+            
+            var testCustomerId = testCustomer.Id;
+            var updatedName = "Customer Service Tests";
+            var newCustomerDto = new NewCustomerDto(updatedName, contactNo, emailAddress, physicalAddress);
+
+            await _customerService.UpdateCustomerDetailsAsync(testCustomerId.ToString(), newCustomerDto);
+            
+            var existingCustomersRecord = _customerService.GetCustomer(testCustomerId);
+
+            existingCustomersRecord.Should().NotBeNull();
+            existingCustomersRecord.CustomerName.Should().Be(updatedName);
+            existingCustomersRecord.CustomerName.Should().NotBe(testCustomer.CustomerName);
+            existingCustomersRecord.ContactNo.Should().Be(testCustomer.ContactNo);
+            existingCustomersRecord.EmailAddress.Should().Be(testCustomer.EmailAddress);
+            existingCustomersRecord.PhysicalAddress.Should().Be(testCustomer.PhysicalAddress);
+            
+            await _customerService.DeleteCustomerAsync(testCustomer.Id);
+        }
+
+        [Fact(Skip = "Awaiting bug #24 to be resolved")]
+        public async void GivenCorrectDetailsWhenUpdatingCustomerReturnTypeMustBeCustomerDetailsDto()
+        {
+            var customerName = Faker.Name.FullName();
+            var contactNo = Faker.Phone.Number();
+            var emailAddress = Faker.Internet.Email();
+            var physicalAddress = Faker.Address.City();
+
+            var testCustomer = await _customerService.AddNewCustomerAsync(customerName, contactNo, emailAddress, physicalAddress);
+            
+            var customerId = testCustomer.Id.ToString();
+            var testCustomerUpdatedName = "Test Customer Update";
+            var newCustomerDetailsDto = new NewCustomerDto(testCustomerUpdatedName, contactNo, emailAddress, physicalAddress);
+            
+            var updatedCustomer = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomerDetailsDto);
+
+            updatedCustomer.Should().NotBeNull();
+            updatedCustomer.Should().BeOfType(typeof(CustomerDetailsDto));
+            
+            await _customerService.DeleteCustomerAsync(testCustomer.Id);
+        }
+        
+        [Fact]
+        public async Task GivenEmptyNameWhenUpdatingCustomerReturnShouldBeNull()
+        {
+            var customerId = Guid.NewGuid().ToString();
+            var customerName = string.Empty;
+            var contactNo = Faker.Phone.Number();
+            var emailAddress = Faker.Internet.Email();
+            var physicalAddress = Faker.Address.City();
+
+            var newCustomerDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
+
+            var customer = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomerDto);
+
+            customer.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GivenEmptyContactNoWhenUpdatingCustomerReturnShouldBeNull()
+        {
+            var customerId = Guid.NewGuid().ToString();
+            var customerName = Faker.Name.FullName();
+            var contactNo = string.Empty;
+            var emailAddress = Faker.Internet.Email();
+            var physicalAddress = Faker.Address.City();
+
+            var newCustomerDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
+
+            var customer = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomerDto);
+
+            customer.Should().BeNull();
+        }
+
+        [Fact]
+        public async void GivenEmptyEmailWhenUpdatingCustomerReturnShouldBeNull()
+        {
+            var customerId = Guid.NewGuid().ToString();
+            var customerName = Faker.Name.FullName();
+            var contactNo = Faker.Phone.Number();
+            var emailAddress = string.Empty;
+            var physicalAddress = Faker.Address.City();
+
+            var newCustomerDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
+
+            var customer = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomerDto);
+
+            customer.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GivenEmptyAddressWhenUpdatingCustomerReturnShouldBeNull()
+        {
+            var customerId = Guid.NewGuid().ToString();
+            var customerName = Faker.Name.FullName();
+            var contactNo = Faker.Phone.Number();
+            var emailAddress = Faker.Internet.Email();
+            var physicalAddress = string.Empty;
+
+            var newCustomerDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
+
+            var customer = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomerDto);
+
+            customer.Should().BeNull();
         }
     }
 }

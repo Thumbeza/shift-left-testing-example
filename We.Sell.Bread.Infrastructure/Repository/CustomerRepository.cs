@@ -32,10 +32,10 @@ namespace We.Sell.Bread.Infrastructure.Repository
                 PhysicalAddress = entity.PhysicalAddress,
             };
              
-           customers.Add(newCustomer);
+            customers.Add(newCustomer);
 
 
-           await JsonHelper.StreamWriteAsync(customers, _customerFilePath);
+            await JsonHelper.StreamWriteAsync(customers, _customerFilePath);
 
             return newCustomer;
         }
@@ -60,9 +60,20 @@ namespace We.Sell.Bread.Infrastructure.Repository
             return customer;
         }
 
-        public CustomerDetailsDto UpdateCustomer(string customerId, NewCustomerDto entity)
+        public async Task<CustomerDetailsDto> UpdateCustomer(CustomerDetailsDto entity)
         {
-            throw new NotImplementedException();
+            var customerJsonString = JsonHelper.ReadJsonFile(_customerFilePath);
+
+            var existingCustomersList = JsonHelper.Deserialize<IList<CustomerDetailsDto>>(customerJsonString);
+
+            var customerDtoToFind = existingCustomersList.FirstOrDefault(x => x.Id.ToString() == entity.Id.ToString());
+
+            existingCustomersList.Remove(customerDtoToFind);
+            existingCustomersList.Add(entity);
+
+            await JsonHelper.StreamWriteAsync(existingCustomersList, _customerFilePath);
+
+            return entity;
         }
 
         public async Task<bool> DeleteCustomerAsync(string customerId)

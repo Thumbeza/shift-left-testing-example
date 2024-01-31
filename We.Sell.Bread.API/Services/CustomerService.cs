@@ -2,6 +2,7 @@
 using We.Sell.Bread.Core.DTOs.Customer;
 using We.Sell.Bread.Core.Validations;
 using We.Sell.Bread.Infrastructure.Repository;
+using We.Sell.Bread.Infrastructure.Helpers;
 
 namespace We.Sell.Bread.API.Services
 {
@@ -30,6 +31,14 @@ namespace We.Sell.Bread.API.Services
             return customer !=null ? customer : null;
         }
 
+        public async Task<CustomerDetailsDto?> UpdateCustomerDetailsAsync(string customerId, NewCustomerDto customer)
+        {
+            var customerDetailsDto = new CustomerDetailsDto
+                (Guid.Parse(customerId), customer.CustomerName, customer.ContactNo, customer.EmailAddress, customer.PhysicalAddress);
+
+            return Validate.ValidateCustomerDetailsDto(customerDetailsDto) ? await _customerRepository.UpdateCustomer(customerDetailsDto) : null ;
+        }
+
         public CustomerDetailsDto? GetCustomer(Guid id)
         {
             Validate.NullOrEmptyArgument(id.ToString());
@@ -37,7 +46,7 @@ namespace We.Sell.Bread.API.Services
             var customer = _customerRepository.GetCustomerById(id.ToString());
 
             return customer != null ?
-                new CustomerDetailsDto(id, customer.CustomerName, customer.CustomerName, customer.EmailAddress, customer.PhysicalAddress) : null;
+                new CustomerDetailsDto(id, customer.CustomerName, customer.ContactNo, customer.EmailAddress, customer.PhysicalAddress) : null;
         }
 
         public IEnumerable<CustomerDetailsDto> GetAllCustomers()
@@ -52,6 +61,12 @@ namespace We.Sell.Bread.API.Services
             var customer = await _customerRepository.DeleteCustomerAsync(id.ToString());
 
             return customer != false ? customer : false;
+        }
+
+        public bool VerifyCustomerExists(string id)
+        {
+            return _customerRepository.GetCustomerById(id) == null ?
+                false : true ;
         }
     }
 }
