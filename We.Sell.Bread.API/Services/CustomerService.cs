@@ -2,7 +2,6 @@
 using We.Sell.Bread.Core.DTOs.Customer;
 using We.Sell.Bread.Core.Validations;
 using We.Sell.Bread.Infrastructure.Repository;
-using We.Sell.Bread.Infrastructure.Helpers;
 
 namespace We.Sell.Bread.API.Services
 {

@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "Id": "d1a993e8-398a-4ada-9035-b16d280ba987",
     "CustomerName": "Mohamed Adbul",
@@ -12,5 +12,47 @@
     "ContactNo": "+34782945683",
     "EmailAddress": "sarah.smith@deloitte.com",
     "PhysicalAddress": "London"
+  },
+  {
+    "Id": "9a2946a0-51c6-4ad9-83bf-97e83c5ec21d",
+    "CustomerName": "Sarah Smith",
+    "ContactNo": "+34782945683",
+    "EmailAddress": "sarah.smith@deloitte.com",
+    "PhysicalAddress": "London"
+  },
+  {
+    "Id": "ffb8d5e9-d7cb-4422-8505-d13dbf5d420a",
+    "CustomerName": "Araujo Clair",
+    "ContactNo": "+64882945683",
+    "EmailAddress": "JoseAlmeidaLima@armyspy.com",
+    "PhysicalAddress": "Gemerny"
+  },
+  {
+    "Id": "f4057bd7-e40d-4cf9-b3ad-e5b65146e37c",
+    "CustomerName": "John Terry",
+    "ContactNo": "+78582965683",
+    "EmailAddress": "john.Terry@amozon.com",
+    "PhysicalAddress": "Belgium"
+  },
+  {
+    "Id": "69a63e4e-c48c-43e1-8ccc-c1b336230e57",
+    "CustomerName": "Tiago Silver",
+    "ContactNo": "+15482945683",
+    "EmailAddress": "Tiago.Silver@rhyta.com",
+    "PhysicalAddress": "Brazil"
+  },
+  {
+    "Id": "00000000-0000-0000-0000-000000000000",
+    "CustomerName": "Alan Jerde",
+    "ContactNo": "1-416-177-4884",
+    "EmailAddress": "uriah@wiegand.uk",
+    "PhysicalAddress": "Dejonfort"
+  },
+  {
+    "Id": "9b83f39b-d084-4f3d-a10f-627d992fe54f",
+    "CustomerName": "Miss Guadalupe Sauer",
+    "ContactNo": "734-645-9333 x89280",
+    "EmailAddress": "robin@hermann.co.uk",
+    "PhysicalAddress": "Milfordshire"
   }
 ]
