@@ -96,19 +96,26 @@ public class CustomerController : ControllerBase
         return IsdeletionSuccessful == false ? NotFound() : NoContent();
     }
 
-
-
     [HttpPut(Name = "UpdateCustomer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CustomerDetailsDto>> Put(string customerId, NewCustomerDto customer)
+    public async Task<ActionResult<CustomerDetailsDto>> Put(string customerId, NewCustomerDto newCustomer)
     {
-        _logger.LogInformation($"Updating the following customer's details: {customer.CustomerName}");
+        _logger.LogInformation($"Updating the following customer's details: {newCustomer.CustomerName}");
 
-        if (_customerService.VerifyCustomerExists(customerId))
+        var isValid = Guid.TryParse(customerId, out _);
+
+        if (!isValid)
         {
-            var customerDetails = await _customerService.UpdateCustomerDetailsAsync(customerId, customer);
+            return BadRequest($"Customer Id: '{customerId}' is not a valid Guid.");
+        }
+
+        var customer = _customerService.GetCustomer(Guid.Parse(customerId));
+
+        if (customer != null)
+        {
+            var customerDetails = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomer);
             
             if (customerDetails != null)
             {

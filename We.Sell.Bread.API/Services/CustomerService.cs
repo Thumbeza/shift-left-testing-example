@@ -61,11 +61,5 @@ namespace We.Sell.Bread.API.Services
 
             return customer != false ? customer : false;
         }
-
-        public bool VerifyCustomerExists(string id)
-        {
-            return _customerRepository.GetCustomerById(id) == null ?
-                false : true ;
-        }
     }
 }
