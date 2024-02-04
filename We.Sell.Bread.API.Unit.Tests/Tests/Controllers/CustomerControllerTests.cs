@@ -114,7 +114,24 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
 
             var newCustomerDetailsDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
 
-            var incorrectId = "0";
+            var incorrectId = Guid.NewGuid().ToString();
+            var updateCustomerResponse = await _controller.Put(incorrectId, newCustomerDetailsDto);
+
+            updateCustomerResponse.Should().NotBeNull();
+            updateCustomerResponse.Result.Should().BeOfType<NotFoundObjectResult>();
+        }
+
+        [Fact]
+        public async void GivenInvalidGuidWhenUpdatingAnExistingCustomerResponseStatusShouldBeBadRequest()
+        {
+            var customerName = Faker.Name.FullName();
+            var contactNo = Faker.Phone.Number();
+            var emailAddress = Faker.Internet.Email();
+            var physicalAddress = Faker.Address.City();
+
+            var newCustomerDetailsDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
+
+            var incorrectId = Guid.NewGuid().ToString();
             var updateCustomerResponse = await _controller.Put(incorrectId, newCustomerDetailsDto);
 
             updateCustomerResponse.Should().NotBeNull();
