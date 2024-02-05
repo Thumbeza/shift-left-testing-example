@@ -30,7 +30,7 @@ public class CustomerController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<CustomerDetailsDto>> PostAsync(NewCustomerDto customer)
     {
-        _logger.LogInformation($"Attempting to create a neew customer: {customer.CustomerName}");
+        _logger.LogInformation($"Attempting to create a new customer: {customer.CustomerName}");
 
          var customerDetails = await _customerService.AddNewCustomerAsync(customer.CustomerName, customer.ContactNo, customer.EmailAddress, customer.PhysicalAddress);
 
@@ -94,5 +94,37 @@ public class CustomerController : ControllerBase
         var IsdeletionSuccessful = await _customerService.DeleteCustomerAsync(new Guid(customerId));
 
         return IsdeletionSuccessful == false ? NotFound() : NoContent();
+    }
+
+    [HttpPut(Name = "UpdateCustomer")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<CustomerDetailsDto>> Put(string customerId, NewCustomerDto newCustomer)
+    {
+        _logger.LogInformation($"Updating the following customer's details: {newCustomer.CustomerName}");
+
+        var isValid = Guid.TryParse(customerId, out _);
+
+        if (!isValid)
+        {
+            return BadRequest($"Customer Id: '{customerId}' is not a valid Guid.");
+        }
+
+        var customer = _customerService.GetCustomer(Guid.Parse(customerId));
+
+        if (customer != null)
+        {
+            var customerDetails = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomer);
+            
+            if (customerDetails != null)
+            {
+                _logger.LogInformation($"Customer: {customerDetails.Id} details have been updated.");
+            }
+
+            return customerDetails == null ? BadRequest("One or more customer details were invalid") : customerDetails;
+        }
+
+        return NotFound($"Customer ID: {customerId} not found");
     }
 }

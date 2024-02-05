@@ -7,7 +7,7 @@ namespace We.Sell.Bread.Core.Interfaces
         Task<CustomerDetailsDto> CreateCustomerAsync(NewCustomerDto entity);
         CustomerDetailsDto GetCustomerById(string customerId);
         IEnumerable<CustomerDetailsDto> GetAllCustomers();
-        CustomerDetailsDto UpdateCustomer(string customerId, NewCustomerDto entity);
+        Task<CustomerDetailsDto> UpdateCustomer(CustomerDetailsDto entity);
         Task<bool> DeleteCustomerAsync(string customerId);
     }
 }
