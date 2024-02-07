@@ -122,16 +122,16 @@ jobs:
         with:
           dotnet-version: 6.0.x
 
-  e2e_tests:
-    needs: deploy_to_test
-    runs-on: ubuntu-latest
+  # e2e_tests:
+  #   needs: deploy_to_test
+  #   runs-on: ubuntu-latest
       
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Setup .NET
+  #       uses: actions/setup-dotnet@v3
+  #       with:
+  #         dotnet-version: 6.0.x
 
   # approve_staging_or_uat_release: 
   #   runs-on: ubuntu-latest 
