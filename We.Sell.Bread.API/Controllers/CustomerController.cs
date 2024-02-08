@@ -5,18 +5,11 @@ namespace We.Sell.Bread.API.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class CustomerController : ControllerBase
+public class CustomerController(ILogger<CustomerController> logger) : ControllerBase
 {
-    private readonly ILogger<CustomerController> _logger;
+    private readonly ILogger<CustomerController> _logger = logger;
 
-    private readonly CustomerService _customerService;
-
-    public CustomerController(ILogger<CustomerController> logger)
-    {
-        _logger = logger;
-
-        _customerService = new CustomerService();
-    }
+    private readonly CustomerService _customerService = new();
 
     [HttpGet(Name = "PingCustomer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -58,7 +51,7 @@ public class CustomerController : ControllerBase
 
         _logger.LogInformation($"A customer with Id: '{customerId}' has been retrieved");
 
-        return customerDetails == null ? NotFound($"The custormer with id: {customerId} was not found.") : customerDetails;
+        return customerDetails == null ? NotFound($"The customer with id: {customerId} was not found.") : customerDetails;
     }
 
     [HttpGet(Name = "GetAllCustomers")]
@@ -91,9 +84,9 @@ public class CustomerController : ControllerBase
             return BadRequest($"Customer Id: '{customerId}' is not a valid Guid.");
         }
 
-        var IsdeletionSuccessful = await _customerService.DeleteCustomerAsync(new Guid(customerId));
+        var IsDeletionSuccessful = await _customerService.DeleteCustomerAsync(new Guid(customerId));
 
-        return IsdeletionSuccessful == false ? NotFound() : NoContent();
+        return IsDeletionSuccessful == false ? NotFound() : NoContent();
     }
 
     [HttpPut(Name = "UpdateCustomer")]

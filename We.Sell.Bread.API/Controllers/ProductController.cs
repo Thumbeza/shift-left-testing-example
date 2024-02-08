@@ -5,18 +5,11 @@ namespace We.Sell.Bread.API.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class ProductController : ControllerBase
+public class ProductController(ILogger<ProductController> logger) : ControllerBase
 {
-    private readonly ILogger<ProductController> _logger;
+    private readonly ILogger<ProductController> _logger = logger;
 
-    private readonly ProductService _productService;
-
-    public ProductController(ILogger<ProductController> logger)
-    {
-        _logger = logger;
-
-        _productService = new ProductService();
-    }
+    private readonly ProductService _productService = new();
 
     [HttpGet(Name = "PingProduct")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -30,7 +23,7 @@ public class ProductController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ProductDetailsDto>> PostAsync(NewProductDto product)
     {
-        _logger.LogInformation($"Attempting to create a neew product: {product.ProductName}");
+        _logger.LogInformation($"Attempting to create a new product: {product.ProductName}");
 
         var productDetails = await _productService.AddNewProductAsync(product.ProductName, product.Price, product.Description, product.StockQuantity);
 
