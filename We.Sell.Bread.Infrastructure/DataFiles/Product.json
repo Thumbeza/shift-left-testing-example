@@ -33,5 +33,89 @@
     "Price": 45.10,
     "Description": "Fermented with naturally occurring wild yeast and lactic acid bacteria, giving it a tangy flavo",
     "StockQuantity": 5
+  },
+  {
+    "ProductId": "bfd2f3bd-11b2-441d-8680-d53fdfc0cd0c",
+    "ProductName": "alias",
+    "Price": 1.0,
+    "Description": "Quasi quo adipisci dicta iste nesciunt voluptatum ipsam quia dolores odio sequi.",
+    "StockQuantity": 47
+  },
+  {
+    "ProductId": "ccc69b2d-a8d9-4c2b-9964-18da44abbd37",
+    "ProductName": "Hazle",
+    "Price": 769955523.0,
+    "Description": "Javier Waters MD",
+    "StockQuantity": 1627140811
+  },
+  {
+    "ProductId": "19c70b48-8a39-4860-bf66-3cd1a8c2a121",
+    "ProductName": "alias",
+    "Price": 21.0,
+    "Description": "Est eveniet autem hic vel facilis ipsum officiis assumenda eos officia dolor quis.",
+    "StockQuantity": 49
+  },
+  {
+    "ProductId": "c21e67e2-badd-4cd8-87aa-1cbee46f3728",
+    "ProductName": "Janie",
+    "Price": 1472173082.0,
+    "Description": "Miss Verner McClure IV",
+    "StockQuantity": 134584145
+  },
+  {
+    "ProductId": "bf653585-ce3f-4f05-8aca-7149d11f9a4a",
+    "ProductName": "Jayne",
+    "Price": 711020069.0,
+    "Description": "Rowland Jacobson DVM",
+    "StockQuantity": 843674405
+  },
+  {
+    "ProductId": "cfa649bd-1a6d-4932-8ac5-b061f9cfbd3d",
+    "ProductName": "alias",
+    "Price": 41.0,
+    "Description": "Id sed aspernatur aperiam corporis quisquam rerum quia ut sit et quia commodi harum in velit.",
+    "StockQuantity": 34
+  },
+  {
+    "ProductId": "1485d5b9-9e07-4b8d-aee7-f4baf639f522",
+    "ProductName": "alias",
+    "Price": 38.0,
+    "Description": "Possimus quia fugiat velit quibusdam eaque sed error eum ratione deleniti rerum vel.",
+    "StockQuantity": 14
+  },
+  {
+    "ProductId": "85e34b59-b5b5-431d-927f-6a474cf6b0c6",
+    "ProductName": "Cicero",
+    "Price": 1522480164.0,
+    "Description": "Mckayla Rosenbaum",
+    "StockQuantity": 1515211547
+  },
+  {
+    "ProductId": "5198e47c-20a1-4303-bf93-dd037294ec0b",
+    "ProductName": "alias",
+    "Price": 31.0,
+    "Description": "Possimus eum sunt itaque blanditiis ipsam repudiandae qui amet provident consectetur eum non ut aut.",
+    "StockQuantity": 45
+  },
+  {
+    "ProductId": "4dd1e414-cdf5-4993-a37d-1a851482f652",
+    "ProductName": "Gino",
+    "Price": 2030222839.0,
+    "Description": "Providenci Wisozk",
+    "StockQuantity": 1704882084
+  },
+  {
+    "ProductId": "eb9325fb-f327-4745-ae28-0376b3713f7a",
+    "ProductName": "Fay",
+    "Price": 977277240.0,
+    "Description": "Carmel Osinski III",
+    "StockQuantity": 208376909
+  },
+  {
+    "ProductId": "34348030-1408-4a56-af5a-6ec90c6408bd",
+    "ProductName": "alias",
+    "Price": 27.0,
+    "Description": "Ad possimus et numquam quisquam atque voluptates possimus sint quia in rerum sit.",
+    "StockQuantity": 47
   }
 ]
