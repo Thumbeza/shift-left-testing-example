@@ -1,23 +1,19 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc.Testing;
-using We.Sell.Bread.API.Integration.Tests.Utilities;
 
 namespace We.Sell.Bread.API.Integration.Tests.Tests
 {
-    public class CustomerControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
+    public class CustomerControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> _factory;
         private readonly HttpClient _httpClient;
 
         public CustomerControllerTests(
-            CustomWebApplicationFactory<Program> factory)
+            WebApplicationFactory<Program> factory)
         {
             _factory = factory;
 
-            _httpClient = _factory.CreateClient(new WebApplicationFactoryClientOptions
-            {
-                AllowAutoRedirect = false
-            });
+            _httpClient = _factory.CreateClient();
         }
 
         [Fact]
@@ -59,11 +55,7 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
         [Fact]
         public async Task GivenDataExistWhenRetrievingAllCustomerReturnOkStatusCodeAsync()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/Customer/GetAllCustomers");
-
-            var response = await _httpClient.SendAsync(request);
-
-            //var response = await _httpClient.GetAsync("/Customer/GetAllCustomers");
+            var response = await _httpClient.GetAsync("/Customer/GetAllCustomers");
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
