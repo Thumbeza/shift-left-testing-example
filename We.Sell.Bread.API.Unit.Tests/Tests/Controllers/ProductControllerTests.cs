@@ -22,16 +22,16 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
             var product = _productController.GetAll();
 
             product.Should().NotBeNull();
-            product.Should().BeOfType(typeof(ActionResult<List<ProductDetailsDto>>));
+            product.Should().BeOfType(typeof(ActionResult<List<ProductDto>>));
         }
 
         [Fact]
         public void GivenCorrectIdWhenRetrievingProductReturnTypeMustBeProductDetailsDtoActionResults()
         {
-            var product = _productController.GetById(ProductData.ProductIdString);
+            var product = _productController.Get(ProductData.ProductIdString);
 
             product.Should().NotBeNull();
-            product.Should().BeOfType(typeof(ActionResult<ProductDetailsDto>));
+            product.Should().BeOfType(typeof(ActionResult<ProductDto>));
         }
 
         [Fact]
@@ -42,12 +42,12 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
             var description = Faker.Name.FullName();
             var stockQuantity = Faker.RandomNumber.Next();
 
-            var product = new NewProductDto(productName, price, description, stockQuantity);
+            var product = new ProductCommand(productName, price, description, stockQuantity);
 
-            var response = await _productController.PostAsync(product);
+            var response = await _productController.Post(product);
 
             response.Should().NotBeNull();
-            response.Should().BeOfType(typeof(ActionResult<ProductDetailsDto>));
+            response.Should().BeOfType(typeof(ActionResult<ProductDto>));
         }
     }
 }

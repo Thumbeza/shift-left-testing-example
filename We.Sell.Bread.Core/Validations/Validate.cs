@@ -24,7 +24,7 @@ namespace We.Sell.Bread.Core.Validations
             }
         }
 
-        public static bool ValidateCustomerDetailsDto(CustomerDetailsDto customer)
+        public static bool ValidateCustomerDetailsDto(CustomerDto customer)
         {
             try
             {

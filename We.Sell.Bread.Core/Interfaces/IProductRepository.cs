@@ -4,8 +4,8 @@ namespace We.Sell.Bread.Core.Interfaces
 {
     public interface IProductRepository
     {
-        Task<ProductDetailsDto>CreateProductAsync(NewProductDto entity);
-        ProductDetailsDto GetProductById(string productId);
-        IEnumerable<ProductDetailsDto> GetAllProducts();
+        Task<ProductDto>CreateProductAsync(ProductCommand entity);
+        ProductDto GetProductById(string productId);
+        IEnumerable<ProductDto> GetAllProducts();
     }
 }

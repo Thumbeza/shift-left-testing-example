@@ -112,7 +112,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             var customer = await _customerService.AddNewCustomerAsync(customerName, contactNo, emailAddress, physicalAddress);
 
             customer.Should().NotBeNull();
-            customer.Should().BeOfType(typeof(CustomerDetailsDto));
+            customer.Should().BeOfType(typeof(CustomerDto));
 
             await _customerService.DeleteCustomerAsync(customer.Id);
         }
@@ -123,7 +123,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             var customer = _customerService.GetCustomer(CustomerData.CustomerIdGuid);
 
             customer.Should().NotBeNull();
-            customer.Should().BeOfType(typeof(CustomerDetailsDto));
+            customer.Should().BeOfType(typeof(CustomerDto));
         }
 
         [Fact]
@@ -132,7 +132,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             var customer = _customerService.GetAllCustomers();
 
             customer.Should().NotBeNull();
-            customer.Should().BeOfType(typeof(List<CustomerDetailsDto>));
+            customer.Should().BeOfType(typeof(List<CustomerDto>));
         }
 
         [Fact]
@@ -173,7 +173,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             
             var testCustomerId = testCustomer.Id;
             var updatedName = "Customer Service Tests";
-            var newCustomerDto = new NewCustomerDto(updatedName, contactNo, emailAddress, physicalAddress);
+            var newCustomerDto = new CustomerCommand(updatedName, contactNo, emailAddress, physicalAddress);
 
             await _customerService.UpdateCustomerDetailsAsync(testCustomerId.ToString(), newCustomerDto);
             
@@ -201,12 +201,12 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             
             var customerId = testCustomer.Id.ToString();
             var testCustomerUpdatedName = "Test Customer Update";
-            var newCustomerDetailsDto = new NewCustomerDto(testCustomerUpdatedName, contactNo, emailAddress, physicalAddress);
+            var newCustomerDetailsDto = new CustomerCommand(testCustomerUpdatedName, contactNo, emailAddress, physicalAddress);
             
             var updatedCustomer = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomerDetailsDto);
 
             updatedCustomer.Should().NotBeNull();
-            updatedCustomer.Should().BeOfType(typeof(CustomerDetailsDto));
+            updatedCustomer.Should().BeOfType(typeof(CustomerDto));
             
             await _customerService.DeleteCustomerAsync(testCustomer.Id);
         }
@@ -220,7 +220,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             var emailAddress = Faker.Internet.Email();
             var physicalAddress = Faker.Address.City();
 
-            var newCustomerDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
+            var newCustomerDto = new CustomerCommand(customerName, contactNo, emailAddress, physicalAddress);
 
             var customer = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomerDto);
 
@@ -236,7 +236,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             var emailAddress = Faker.Internet.Email();
             var physicalAddress = Faker.Address.City();
 
-            var newCustomerDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
+            var newCustomerDto = new CustomerCommand(customerName, contactNo, emailAddress, physicalAddress);
 
             var customer = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomerDto);
 
@@ -252,7 +252,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             var emailAddress = string.Empty;
             var physicalAddress = Faker.Address.City();
 
-            var newCustomerDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
+            var newCustomerDto = new CustomerCommand(customerName, contactNo, emailAddress, physicalAddress);
 
             var customer = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomerDto);
 
@@ -268,7 +268,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             var emailAddress = Faker.Internet.Email();
             var physicalAddress = string.Empty;
 
-            var newCustomerDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
+            var newCustomerDto = new CustomerCommand(customerName, contactNo, emailAddress, physicalAddress);
 
             var customer = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomerDto);
 

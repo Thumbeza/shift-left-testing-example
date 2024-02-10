@@ -21,7 +21,7 @@ public class ProductController(ILogger<ProductController> logger) : ControllerBa
     [HttpPost(Name = "CreateProduct")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<ProductDetailsDto>> PostAsync(NewProductDto product)
+    public async Task<ActionResult<ProductDto>> Post(ProductCommand product)
     {
         _logger.LogInformation($"Attempting to create a new product: {product.ProductName}");
 
@@ -30,33 +30,33 @@ public class ProductController(ILogger<ProductController> logger) : ControllerBa
         return productDetails == null ? BadRequest("One or more product details were invalid") : productDetails;
     }
 
-    [HttpGet(Name = "GetProductById")]
+    [HttpGet, Route("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<ProductDetailsDto> GetById(string productId)
+    public ActionResult<ProductDto> Get(string id)
     {
 
-        _logger.LogInformation($"Getting product by Id: {productId}");
+        _logger.LogInformation($"Getting product by Id: {id}");
 
-        var isValid = Guid.TryParse(productId, out _);
+        var isValid = Guid.TryParse(id, out _);
 
         if (!isValid)
         {
-            return BadRequest($"Product Id: '{productId}' is not a valid Guid.");
+            return BadRequest($"Product Id: '{id}' is not a valid Guid.");
         }
 
-        var productDetails = _productService.GetProduct(new Guid(productId));
+        var productDetails = _productService.GetProduct(new Guid(id));
 
-        _logger.LogInformation($"A product with Id: '{productId}' has been retrieved");
+        _logger.LogInformation($"A product with Id: '{id}' has been retrieved");
 
-        return productDetails == null ? NotFound($"The product with id: {productId} was not found.") : productDetails;
+        return productDetails == null ? NotFound($"The product with id: {id} was not found.") : productDetails;
     }
 
     [HttpGet(Name = "GetAllProducts")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<List<ProductDetailsDto>> GetAll()
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public ActionResult<List<ProductDto>> GetAll()
     {
         _logger.LogInformation($"Getting all products.");
 
@@ -64,6 +64,6 @@ public class ProductController(ILogger<ProductController> logger) : ControllerBa
 
         _logger.LogInformation("All products have been retrieved");
 
-        return products.Count == 0 ? NotFound($"No products were found.") : products;
+        return products.Count == 0 ? NoContent() : Ok();
     }
 }

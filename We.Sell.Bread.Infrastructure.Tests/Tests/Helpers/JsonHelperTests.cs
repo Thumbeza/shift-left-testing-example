@@ -41,7 +41,7 @@ namespace We.Sell.Bread.Infrastructure.Tests.Tests.Helpers
         {
             var emptyString = string.Empty;
 
-            var result = () => JsonHelper.Deserialize<CustomerDetailsDto>(emptyString);
+            var result = () => JsonHelper.Deserialize<CustomerDto>(emptyString);
 
             result.Should().Throw<ArgumentNullException>().WithMessage(" cannot be empty or null");
         }
@@ -51,7 +51,7 @@ namespace We.Sell.Bread.Infrastructure.Tests.Tests.Helpers
         {
             var incorrectString = "Testing";
 
-            var result = () => JsonHelper.Deserialize<CustomerDetailsDto>(incorrectString);
+            var result = () => JsonHelper.Deserialize<CustomerDto>(incorrectString);
 
             result.Should().Throw<JsonReaderException>();
         }
@@ -61,7 +61,7 @@ namespace We.Sell.Bread.Infrastructure.Tests.Tests.Helpers
         {
             var stringObject = JsonHelper.ReadJsonFile(_path);
 
-            var result = JsonHelper.Deserialize<IEnumerable<CustomerDetailsDto>>(stringObject);
+            var result = JsonHelper.Deserialize<IEnumerable<CustomerDto>>(stringObject);
 
             result.Should().NotBeNull();
             result.ToList().Should().HaveCount(2);

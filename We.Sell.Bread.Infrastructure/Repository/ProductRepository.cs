@@ -6,25 +6,25 @@ namespace We.Sell.Bread.Infrastructure.Repository
 {
     public class ProductRepository : IProductRepository
     {
-        private string _basePath;
-        private string _ProductFilePath;
+        private readonly string _basePath;
+        private readonly string _ProductFilePath;
 
-        public ProductRepository() 
+        public ProductRepository()
         {
             _basePath = FileHelper.GetBasePath();
 
             _ProductFilePath = $"{_basePath}/We.Sell.Bread.Infrastructure/DataFiles/Product.json"; ;
         }
 
-        public async Task<ProductDetailsDto> CreateProductAsync(NewProductDto entity)
+        public async Task<ProductDto> CreateProductAsync(ProductCommand entity)
         {
             var productJson = JsonHelper.ReadJsonFile(_ProductFilePath);
 
-            var products = JsonHelper.Deserialize<List<ProductDetailsDto>>(productJson);
+            var products = JsonHelper.Deserialize<List<ProductDto>>(productJson);
 
-            var newProduct = new ProductDetailsDto(new Guid(), entity.ProductName, entity.Price, entity.Description, entity.StockQuantity)
+            var newProduct = new ProductDto(new Guid(), entity.ProductName, entity.Price, entity.Description, entity.StockQuantity)
             {
-                ProductId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 ProductName = entity.ProductName,
                 Price = entity.Price,
                 Description = entity.Description,
@@ -39,22 +39,22 @@ namespace We.Sell.Bread.Infrastructure.Repository
             return newProduct;
         }
 
-        public IEnumerable<ProductDetailsDto> GetAllProducts()
+        public IEnumerable<ProductDto> GetAllProducts()
         {
             var productJson = JsonHelper.ReadJsonFile(_ProductFilePath);
 
-            var products = JsonHelper.Deserialize<IEnumerable<ProductDetailsDto>>(productJson);
+            var products = JsonHelper.Deserialize<IEnumerable<ProductDto>>(productJson);
 
             return products;
         }
 
-        public ProductDetailsDto? GetProductById(string productId)
+        public ProductDto? GetProductById(string productId)
         {
             var productJson = JsonHelper.ReadJsonFile(_ProductFilePath);
 
-            var products = JsonHelper.Deserialize<IEnumerable<ProductDetailsDto>>(productJson);
+            var products = JsonHelper.Deserialize<IEnumerable<ProductDto>>(productJson);
 
-            var product = products.FirstOrDefault(prod => prod.ProductId.ToString() == productId);
+            var product = products.FirstOrDefault(prod => prod.Id.ToString() == productId);
 
             return product;
         }

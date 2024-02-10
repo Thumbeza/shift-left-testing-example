@@ -17,13 +17,13 @@ namespace We.Sell.Bread.Infrastructure.Repository
             _customerFilePath = $"{_basePath}/We.Sell.Bread.Infrastructure/DataFiles/Customer.json"; ;
         }
 
-        public async Task<CustomerDetailsDto> CreateCustomerAsync(NewCustomerDto entity)
+        public async Task<CustomerDto> CreateCustomerAsync(CustomerCommand entity)
         {
            var customerJson = JsonHelper.ReadJsonFile(_customerFilePath);
 
-           var customers = JsonHelper.Deserialize<List<CustomerDetailsDto>>(customerJson);
+           var customers = JsonHelper.Deserialize<List<CustomerDto>>(customerJson);
 
-            var newCustomer = new CustomerDetailsDto(new Guid(), entity.CustomerName, entity.ContactNo, entity.EmailAddress, entity.PhysicalAddress)
+            var newCustomer = new CustomerDto(new Guid(), entity.CustomerName, entity.ContactNo, entity.EmailAddress, entity.PhysicalAddress)
             {
                 Id = Guid.NewGuid(),
                 CustomerName = entity.CustomerName,
@@ -40,31 +40,31 @@ namespace We.Sell.Bread.Infrastructure.Repository
             return newCustomer;
         }
 
-        public IEnumerable<CustomerDetailsDto> GetAllCustomers()
+        public IEnumerable<CustomerDto> GetAllCustomers()
         {
             var customerJson = JsonHelper.ReadJsonFile(_customerFilePath);
 
-            var customers = JsonHelper.Deserialize<IEnumerable<CustomerDetailsDto>>(customerJson);
+            var customers = JsonHelper.Deserialize<IEnumerable<CustomerDto>>(customerJson);
 
             return customers;
         }
 
-        public CustomerDetailsDto? GetCustomerById(string customerId)
+        public CustomerDto? GetCustomerById(string customerId)
         {
             var customerJson = JsonHelper.ReadJsonFile(_customerFilePath);
 
-            var customers = JsonHelper.Deserialize<IEnumerable<CustomerDetailsDto>>(customerJson);
+            var customers = JsonHelper.Deserialize<IEnumerable<CustomerDto>>(customerJson);
 
             var customer = customers.FirstOrDefault(fruit => fruit.Id.ToString() == customerId);
 
             return customer;
         }
 
-        public async Task<CustomerDetailsDto> UpdateCustomer(CustomerDetailsDto entity)
+        public async Task<CustomerDto> UpdateCustomer(CustomerDto entity)
         {
             var customerJsonString = JsonHelper.ReadJsonFile(_customerFilePath);
 
-            var existingCustomersList = JsonHelper.Deserialize<IList<CustomerDetailsDto>>(customerJsonString);
+            var existingCustomersList = JsonHelper.Deserialize<IList<CustomerDto>>(customerJsonString);
 
             var customerDtoToFind = existingCustomersList.FirstOrDefault(x => x.Id.ToString() == entity.Id.ToString());
 
@@ -80,7 +80,7 @@ namespace We.Sell.Bread.Infrastructure.Repository
         {
             var customerJson = JsonHelper.ReadJsonFile(_customerFilePath);
 
-            var customers = JsonHelper.Deserialize<List<CustomerDetailsDto>>(customerJson);
+            var customers = JsonHelper.Deserialize<List<CustomerDto>>(customerJson);
 
             var customerToRemove = customers.FirstOrDefault(Cus => Cus.Id.ToString() == customerId);
 

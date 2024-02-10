@@ -17,31 +17,31 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
             _controller = new CustomerController(_fixture.Logger);
         }
 
-        [Fact(Skip = "Under Inverstigation")]
-        public async Task GivenCorrectDetailsWhenCreatingCustomerReturnTypeMustBeCustomerDetailsDtoActionRetusults()
+        [Fact(Skip = "Under Investigation")]
+        public async Task GivenCorrectDetailsWhenCreatingCustomerReturnTypeMustBeCustomerDetailsDtoActionResults()
         {
             var name = Faker.Name.FullName();
-            var phuneNumber = Faker.Phone.Number();
+            var phoneNumber = Faker.Phone.Number();
             var email = Faker.Internet.Email();
             var address = Faker.Address.City();
 
-            var customer = new NewCustomerDto(name, phuneNumber, email, address);
+            var customer = new CustomerCommand(name, phoneNumber, email, address);
 
-            var response = await _controller.PostAsync(customer);
+            var response = await _controller.Post(customer);
 
             response.Should().NotBeNull();
-            response.Should().BeOfType(typeof(ActionResult<CustomerDetailsDto>));
+            response.Should().BeOfType(typeof(ActionResult<CustomerDto>));
 
-            await _controller.DeleteCustomerAsync(response.Value.Id.ToString());
+            await _controller.Delete(response.Value.Id.ToString());
         }
 
         [Fact]
         public void GivenCorrectIdWhenRetrievingCustomerReturnTypeMustBeCustomerDetailsDtoActionResults()
         {
-            var customer = _controller.GetById(CustomerData.CustomerIdString);
+            var customer = _controller.Get(CustomerData.CustomerIdString);
 
             customer.Should().NotBeNull();
-            customer.Should().BeOfType(typeof(ActionResult<CustomerDetailsDto>));
+            customer.Should().BeOfType(typeof(ActionResult<CustomerDto>));
         }
 
         [Fact]
@@ -50,22 +50,22 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
             var customer = _controller.GetAll();
 
             customer.Should().NotBeNull();
-            customer.Should().BeOfType(typeof(ActionResult<List<CustomerDetailsDto>>));
+            customer.Should().BeOfType(typeof(ActionResult<List<CustomerDto>>));
         }
 
         [Fact(Skip = "Under Inverstigation")]
         public async Task GivenCorrectIdWhenDeletingCustomerReturnTypeMustBeOfNoContentResult()
         {
-            var customer = await _controller.DeleteCustomerAsync(CustomerData.DeleteCustomerIdString);
+            var customer = await _controller.Delete(CustomerData.DeleteCustomerIdString);
 
             customer.Should().NotBeNull();
             customer.Should().BeOfType<NoContentResult>();
         }
 
-        [Fact(Skip = "Under Inverstigation")]
+        [Fact(Skip = "Under Investigation")]
         public async Task GivenInCorrectIdWhenDeletingCustomerReturnTypeMustBeOfNotFoundResult()
         {
-            var customer = await _controller.DeleteCustomerAsync(CustomerData.IncorrectCustomerIdString);
+            var customer = await _controller.Delete(CustomerData.IncorrectCustomerIdString);
 
             customer.Should().NotBeNull();
             customer.Should().BeOfType<NotFoundResult>();
@@ -76,7 +76,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
         {
             var emptyId = string.Empty;
 
-            var customer = await _controller.DeleteCustomerAsync(emptyId);
+            var customer = await _controller.Delete(emptyId);
 
             customer.Should().NotBeNull();
             customer.Should().BeOfType<BadRequestObjectResult>();
@@ -89,8 +89,8 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
             var contactNo = Faker.Phone.Number();
             var emailAddress = Faker.Internet.Email();
             var physicalAddress = Faker.Address.City();
-            var newTestCustomerDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
-            var testCustomer = (await _controller.PostAsync(newTestCustomerDto)).Value;
+            var newTestCustomerDto = new CustomerCommand(customerName, contactNo, emailAddress, physicalAddress);
+            var testCustomer = (await _controller.Post(newTestCustomerDto)).Value;
             var testCustomerId = testCustomer.Id.ToString();
 
             newTestCustomerDto.CustomerName = "Test Customer Controller";
@@ -99,9 +99,9 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
             var updateCustomerResponse = await _controller.Put(testCustomerId, newTestCustomerDto);
 
             updateCustomerResponse.Should().NotBeNull();
-            updateCustomerResponse.Should().BeOfType<ActionResult<CustomerDetailsDto>>();
+            updateCustomerResponse.Should().BeOfType<ActionResult<CustomerDto>>();
 
-            await _controller.DeleteCustomerAsync(testCustomerId);
+            await _controller.Delete(testCustomerId);
         }
 
         [Fact]
@@ -112,13 +112,13 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
             var emailAddress = Faker.Internet.Email();
             var physicalAddress = Faker.Address.City();
 
-            var newCustomerDetailsDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
+            var newCustomerDetailsDto = new CustomerCommand(customerName, contactNo, emailAddress, physicalAddress);
 
             var incorrectId = Guid.NewGuid().ToString();
             var updateCustomerResponse = await _controller.Put(incorrectId, newCustomerDetailsDto);
 
             updateCustomerResponse.Should().NotBeNull();
-            updateCustomerResponse.Result.Should().BeOfType<NotFoundObjectResult>();
+            updateCustomerResponse.Result.Should().BeOfType<BadRequestObjectResult>();
         }
 
         [Fact]
@@ -129,13 +129,13 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
             var emailAddress = Faker.Internet.Email();
             var physicalAddress = Faker.Address.City();
 
-            var newCustomerDetailsDto = new NewCustomerDto(customerName, contactNo, emailAddress, physicalAddress);
+            var newCustomerDetailsDto = new CustomerCommand(customerName, contactNo, emailAddress, physicalAddress);
 
             var incorrectId = Guid.NewGuid().ToString();
             var updateCustomerResponse = await _controller.Put(incorrectId, newCustomerDetailsDto);
 
             updateCustomerResponse.Should().NotBeNull();
-            updateCustomerResponse.Result.Should().BeOfType<NotFoundObjectResult>();
+            updateCustomerResponse.Result.Should().BeOfType<BadRequestObjectResult>();
         }
     }
 }

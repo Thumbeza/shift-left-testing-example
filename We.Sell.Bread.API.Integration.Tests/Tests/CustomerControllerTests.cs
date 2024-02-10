@@ -1,41 +1,56 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Castle.Core.Resource;
+using System.Net.Mail;
+using System.Net.NetworkInformation;
+using We.Sell.Bread.API.Integration.Tests.Helpers;
+using We.Sell.Bread.Core.DTOs.Customer;
 
 namespace We.Sell.Bread.API.Integration.Tests.Tests
 {
-    public class CustomerControllerTests : IClassFixture<WebApplicationFactory<Program>>
+    public class CustomerControllerTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly WebApplicationFactory<Program> _factory;
-        private readonly HttpClient _httpClient;
-
-        public CustomerControllerTests(
-            WebApplicationFactory<Program> factory)
-        {
-            _factory = factory;
-
-            _httpClient = _factory.CreateClient();
-        }
+        private readonly HttpClient _httpClient = factory.CreateClient();
 
         [Fact]
-        public async Task GivenCorrectCustomerIdWhenRetrievingCustomerReturnOkStatusCodeAndCustomerDetails()
+        public async Task GivenCustomerControllerWhenCheckingForServerHealthReturnOkStatusAsync()
         {
-            var customerId = "ad3d2d6c-02fd-48c9-a287-fa33aa197053";
-
-            var response = await _httpClient.GetAsync($"/Customer/GetById/{customerId}");
-
+            var response = await _httpClient.GetAsync($"/Customer/HealthCheck");
 
             response.IsSuccessStatusCode.Should().BeTrue();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-            var result = await response.Content.ReadAsStringAsync();
         }
 
         [Fact]
-        public async Task GivenInCorrectCustomerIdWhenRetrievingCustomerReturnNotFoundStatusCodeAndCustomerDetails()
+        public async Task GivenCorrectCustomerIdWhenRetrievingCustomerReturnOkStatusCodeAsync()
+        {
+            var customerId = "d1a993e8-398a-4ada-9035-b16d280ba987";
+
+            var response = await _httpClient.GetAsync($"/Customer/Get/{customerId}");
+
+            response.IsSuccessStatusCode.Should().BeTrue();
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async Task GivenCorrectCustomerIdWhenRetrievingCustomerReturnCustomerDtoCodeAsync()
+        {
+            var customerId = "d1a993e8-398a-4ada-9035-b16d280ba987";
+
+            var response = await _httpClient.GetAsync($"/Customer/Get/{customerId}");
+
+            response.IsSuccessStatusCode.Should().BeTrue();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var customer = JsonUtils.DeserializeToDto<CustomerDto>(responseContent);
+
+            customer.Id.Should().Be(new Guid(customerId));
+        }
+
+        [Fact]
+        public async Task GivenInCorrectCustomerIdWhenRetrievingCustomerReturnNotFoundStatusCodeAsync()
         {
             var incorrectCustomerId = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
 
-            var response = await _httpClient.GetAsync($"/Customer/GetById/{incorrectCustomerId}");
+            var response = await _httpClient.GetAsync($"/Customer/Get/{incorrectCustomerId}");
 
             response.IsSuccessStatusCode.Should().BeFalse();
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -46,20 +61,151 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
         {
             var customerId = "3fa85f64";
 
-            var response = await _httpClient.GetAsync($"/Customer/GetById/{customerId}");
+            var response = await _httpClient.GetAsync($"/Customer/Get/{customerId}");
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            response.Content.Should().Be($"Customer Id: '{customerId}' is not a valid Guid.");
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            responseContent.Should().Be($"Customer Id: '{customerId}' is not a valid Guid.");
+        }
+
+        [Fact]
+        public async Task GivenInCorrectCustomerIdWhenDeletingCustomerReturnBadRequestStatusCodeAsync()
+        {
+            var incorrectCustomerId = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
+
+            var response = await _httpClient.DeleteAsync($"/Customer/Delete/{incorrectCustomerId}");
+
+            response.IsSuccessStatusCode.Should().BeFalse();
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task GivenInvalidCustomerIdWhenDeletingCustomerReturnBadRequestStatusCodeAsync()
+        {
+            var customerId = "3fa85f64";
+
+            var response = await _httpClient.DeleteAsync($"/Customer/Delete/{customerId}");
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            responseContent.Should().Be($"Customer Id: '{customerId}' is not a valid Guid.");
+        }
+
+        [Fact]
+        public async Task GivenInCorrectCustomerIdWhenUpdatingCustomerReturnBadRequestStatusCodeAsync()
+        {
+            var incorrectCustomerId = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
+            var customerName = "Bheki Sithole";
+
+            var updateCommand = CustomerCommand(customerName);
+
+            var response = await _httpClient.PutAsJsonAsync($"/Customer/Put/{incorrectCustomerId}", updateCommand);
+
+            response.IsSuccessStatusCode.Should().BeFalse();
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task GivenInvalidCustomerIdWhenUpdatingCustomerReturnBadRequestStatusCodeAsync()
+        {
+            var customerId = "3fa85f64";
+            var customerName = "Bheki Sithole";
+
+            var updateCommand = CustomerCommand(customerName);
+
+            var response = await _httpClient.PutAsJsonAsync($"/Customer/Put/{customerId}", updateCommand);
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            responseContent.Should().Be($"Customer Id: '{customerId}' is not a valid Guid.");
+        }
+
+        [Fact]
+        public async Task GivenEmptyNameWhenUpdatingCustomerReturnBadRequestStatusCodeAsync()
+        {
+            var customerId = "d1a993e8-398a-4ada-9035-b16d280ba987";
+
+            var updateCommand = CustomerCommand();
+
+            var response = await _httpClient.PutAsJsonAsync($"/Customer/Put/{customerId}", updateCommand);
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            responseContent.Should().Be("One or more customer details were invalid");
+        }
+
+        [Fact]
+        public async Task GivenEmptyNameWhenCreatingCustomerReturnInternalServerErrorAsync()
+        {
+            var updateCommand = CustomerCommand();
+
+            var response = await _httpClient.PostAsJsonAsync($"/Customer/Post", updateCommand);
+
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
         }
 
         [Fact]
         public async Task GivenDataExistWhenRetrievingAllCustomerReturnOkStatusCodeAsync()
         {
-            var response = await _httpClient.GetAsync("/Customer/GetAllCustomers");
+            var response = await _httpClient.GetAsync("/Customer/GetAll");
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
-       
+        [Fact]
+        public async Task CRUDTestAsync()
+        {
+            //create
+            var customerName = "Zanele Khumalo";
+            var createCommand = CustomerCommand(customerName);
+
+            var response = await _httpClient.PostAsJsonAsync($"/Customer/Post", createCommand);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var customer = JsonUtils.DeserializeToDto<CustomerDto>(responseContent);
+            customer.CustomerName.Should().Be(customerName);
+
+            //read
+            var getResponse = await _httpClient.GetAsync($"/Customer/Get/{customer.Id}");
+
+            getResponse.IsSuccessStatusCode.Should().BeTrue();
+            getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var getResponseContent = await getResponse.Content.ReadAsStringAsync();
+            var getCustomer = JsonUtils.DeserializeToDto<CustomerDto>(getResponseContent);
+            getCustomer.CustomerName.Should().Be(customerName);
+
+            //update
+            var updatedCustomerName = "Zanele Ayanda Khumalo";
+            var updateCommand = CustomerCommand(updatedCustomerName);
+
+            var updateResponse = await _httpClient.PutAsJsonAsync($"/Customer/Put/{customer.Id}", updateCommand);
+            updateResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var updateResponseContent = await updateResponse.Content.ReadAsStringAsync();
+            var updateCustomer = JsonUtils.DeserializeToDto<CustomerDto>(updateResponseContent);
+            updateCustomer.CustomerName.Should().Be(updatedCustomerName);
+
+            //delete
+            var deleteResponse = await _httpClient.DeleteAsync($"/Customer/Delete/{customer.Id}");
+
+            deleteResponse.IsSuccessStatusCode.Should().BeTrue();
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        }
+
+        private static CustomerCommand CustomerCommand(string? customerName = null)
+        {
+            var contactNo = "0456871245";
+            var emailAddress = "foo@far.com";
+            var physicalAddress = "Wembezi";
+
+            return new CustomerCommand(customerName ?? string.Empty, contactNo, emailAddress, physicalAddress);
+        }
     }
 }
