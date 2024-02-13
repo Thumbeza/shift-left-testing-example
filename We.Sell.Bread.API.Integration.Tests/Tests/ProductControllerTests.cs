@@ -68,7 +68,7 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
         [Fact]
         public async Task GivenDataExistWhenRetrievingAllProductReturnOkStatusCodeAsync()
         {
-            var response = await _httpClient.GetAsync("/Product/GetAll");
+            var response = await _httpClient.GetAsync("/Product/Get/All");
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }

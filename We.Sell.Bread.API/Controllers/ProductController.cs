@@ -53,10 +53,10 @@ public class ProductController(ILogger<ProductController> logger) : ControllerBa
         return productDetails == null ? NotFound($"The product with id: {id} was not found.") : productDetails;
     }
 
-    [HttpGet(Name = "GetAllProducts")]
+    [HttpGet, Route("all")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public ActionResult<List<ProductDto>> GetAll()
+    public ActionResult<List<ProductDto>> Get()
     {
         _logger.LogInformation($"Getting all products.");
 
@@ -64,6 +64,6 @@ public class ProductController(ILogger<ProductController> logger) : ControllerBa
 
         _logger.LogInformation("All products have been retrieved");
 
-        return products.Count == 0 ? NoContent() : Ok();
+        return products.Count == 0 ? NoContent() : products;
     }
 }

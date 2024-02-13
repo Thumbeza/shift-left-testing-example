@@ -50,7 +50,9 @@ namespace We.Sell.Bread.API.Services
 
         public IEnumerable<CustomerDto> GetAllCustomers()
         {
-            return _customerRepository.GetAllCustomers();
+            var customers = _customerRepository.GetAllCustomers();
+
+            return customers;
         }
 
         public async Task<bool> DeleteCustomerAsync(Guid id)

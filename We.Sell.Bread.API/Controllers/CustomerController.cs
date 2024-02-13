@@ -54,10 +54,10 @@ public class CustomerController(ILogger<CustomerController> logger) : Controller
         return customerDetails == null ? NotFound($"The customer with id: {id} was not found.") : customerDetails;
     }
 
-    [HttpGet(Name = "GetAllCustomers")]
+    [HttpGet, Route("all")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public ActionResult<List<CustomerDto>> GetAll()
+    public ActionResult<List<CustomerDto>> Get()
     {
         _logger.LogInformation($"Getting all customers.");
 
@@ -65,7 +65,7 @@ public class CustomerController(ILogger<CustomerController> logger) : Controller
 
         _logger.LogInformation("All customers have been retrieved");
 
-        return customers.Count == 0 ? NoContent() : Ok();
+        return customers.Count == 0 ? NoContent() : customers;
     }
 
     [HttpDelete, Route("{id}")]
@@ -73,7 +73,6 @@ public class CustomerController(ILogger<CustomerController> logger) : Controller
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Delete(string id) 
     {
-
         _logger.LogInformation($"Deleting customer details by Id: {id}");
 
         var isValid = Guid.TryParse(id, out _);
