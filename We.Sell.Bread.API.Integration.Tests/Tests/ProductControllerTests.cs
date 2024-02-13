@@ -1,4 +1,5 @@
 ﻿using We.Sell.Bread.API.Integration.Tests.Helpers;
+using We.Sell.Bread.API.Integration.Tests.TestData;
 using We.Sell.Bread.Core.DTOs.Product;
 
 namespace We.Sell.Bread.API.Integration.Tests.Tests
@@ -6,6 +7,8 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
     public class ProductControllerTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _httpClient = factory.CreateClient();
+
+        private static string InvalidGuid => "3fa85f64";
 
         [Fact]
         public async Task GivenProductControllerWhenCheckingForServerHealthReturnOkStatusAsync()
@@ -19,9 +22,7 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
         [Fact]
         public async Task GivenCorrectProductIdWhenRetrievingProductReturnOkStatusCodeAsync()
         {
-            var productId = "7782eb61-534e-40ba-aa2e-6f6e54ae2bfc";
-
-            var response = await _httpClient.GetAsync($"/Product/Get/{productId}");
+            var response = await _httpClient.GetAsync($"/Product/Get/{Product.Id}");
 
             response.IsSuccessStatusCode.Should().BeTrue();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -30,7 +31,7 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
         [Fact]
         public async Task GivenCorrectProductIdWhenRetrievingProductReturnProductDtoCodeAsync()
         {
-            var productId = "7782eb61-534e-40ba-aa2e-6f6e54ae2bfc";
+            var productId = Product.Id;
 
             var response = await _httpClient.GetAsync($"/Product/Get/{productId}");
 
@@ -45,7 +46,7 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
         [Fact]
         public async Task GivenInCorrectProductIdWhenRetrievingProductReturnNotFoundStatusCodeAsync()
         {
-            var incorrectProductId = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
+            var incorrectProductId = Guid.NewGuid().ToString();
 
             var response = await _httpClient.GetAsync($"/Product/Get/{incorrectProductId}");
 
@@ -56,14 +57,12 @@ namespace We.Sell.Bread.API.Integration.Tests.Tests
         [Fact]
         public async Task GivenInvalidProductIdWhenRetrievingProductReturnBadRequestStatusCodeAsync()
         {
-            var productId = "3fa85f64";
-
-            var response = await _httpClient.GetAsync($"/Product/Get/{productId}");
+            var response = await _httpClient.GetAsync($"/Product/Get/{InvalidGuid}");
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             var responseContent = await response.Content.ReadAsStringAsync();
-            responseContent.Should().Be($"Product Id: '{productId}' is not a valid Guid.");
+            responseContent.Should().Be($"Product Id: '{InvalidGuid}' is not a valid Guid.");
         }
 
         [Fact]
