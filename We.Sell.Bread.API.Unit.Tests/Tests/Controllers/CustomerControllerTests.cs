@@ -47,7 +47,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
         [Fact]
         public void GivenDataExistsWhenRetrievingCustomersReturnTypeMustBeListCustomerDetailsDtoActionResults()
         {
-            var customer = _controller.GetAll();
+            var customer = _controller.Get();
 
             customer.Should().NotBeNull();
             customer.Should().BeOfType(typeof(ActionResult<List<CustomerDto>>));

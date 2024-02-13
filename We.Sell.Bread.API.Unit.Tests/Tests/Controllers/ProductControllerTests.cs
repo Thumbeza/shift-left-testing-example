@@ -19,7 +19,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
         [Fact]
         public void GivenDataExistWhenRetrievingProductReturnTypeMustBeListProductDetailsDtoActionResults()
         {
-            var product = _productController.GetAll();
+            var product = _productController.Get();
 
             product.Should().NotBeNull();
             product.Should().BeOfType(typeof(ActionResult<List<ProductDto>>));
