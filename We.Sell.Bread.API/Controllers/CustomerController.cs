@@ -5,18 +5,11 @@ namespace We.Sell.Bread.API.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class CustomerController : ControllerBase
+public class CustomerController(ILogger<CustomerController> logger) : ControllerBase
 {
-    private readonly ILogger<CustomerController> _logger;
+    private readonly ILogger<CustomerController> _logger = logger;
 
-    private readonly CustomerService _customerService;
-
-    public CustomerController(ILogger<CustomerController> logger)
-    {
-        _logger = logger;
-
-        _customerService = new CustomerService();
-    }
+    private readonly CustomerService _customerService = new();
 
     [HttpGet(Name = "PingCustomer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -28,7 +21,7 @@ public class CustomerController : ControllerBase
     [HttpPost(Name = "CreateCustomer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CustomerDetailsDto>> PostAsync(NewCustomerDto customer)
+    public async Task<ActionResult<CustomerDto>> Post(CustomerCommand customer)
     {
         _logger.LogInformation($"Attempting to create a new customer: {customer.CustomerName}");
 
@@ -38,33 +31,33 @@ public class CustomerController : ControllerBase
     }
 
 
-    [HttpGet(Name = "GetCustomerById")]
+    [HttpGet, Route("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<CustomerDetailsDto> GetById(string customerId)
+    public ActionResult<CustomerDto> Get(string id)
     {
 
-        _logger.LogInformation($"Getting customer by Id: {customerId}");
+        _logger.LogInformation($"Getting customer by Id: {id}");
 
-        var isValid = Guid.TryParse(customerId, out _);
+        var isValid = Guid.TryParse(id, out _);
 
         if (!isValid)
         {
-            return BadRequest($"Customer Id: '{customerId}' is not a valid Guid.");
+            return BadRequest($"Customer Id: '{id}' is not a valid Guid.");
         }
 
-        var customerDetails = _customerService.GetCustomer(new Guid(customerId));
+        var customerDetails = _customerService.GetCustomer(new Guid(id));
 
-        _logger.LogInformation($"A customer with Id: '{customerId}' has been retrieved");
+        _logger.LogInformation($"A customer with Id: '{id}' has been retrieved");
 
-        return customerDetails == null ? NotFound($"The custormer with id: {customerId} was not found.") : customerDetails;
+        return customerDetails == null ? NotFound($"The customer with id: {id} was not found.") : customerDetails;
     }
 
-    [HttpGet(Name = "GetAllCustomers")]
+    [HttpGet, Route("all")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<List<CustomerDetailsDto>> GetAll()
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public ActionResult<List<CustomerDto>> Get()
     {
         _logger.LogInformation($"Getting all customers.");
 
@@ -72,50 +65,47 @@ public class CustomerController : ControllerBase
 
         _logger.LogInformation("All customers have been retrieved");
 
-        return customers.Count == 0 ? NotFound($"No customers were found.") : customers;
+        return customers.Count == 0 ? NoContent() : customers;
     }
 
-    [HttpDelete(Name = "DeleteCustomer")]
+    [HttpDelete, Route("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> DeleteCustomerAsync(string customerId) 
+    public async Task<ActionResult> Delete(string id) 
     {
+        _logger.LogInformation($"Deleting customer details by Id: {id}");
 
-        _logger.LogInformation($"Deleting customer details by Id: {customerId}");
-
-        var isValid = Guid.TryParse(customerId, out _);
+        var isValid = Guid.TryParse(id, out _);
 
         if (!isValid)
         {
-            return BadRequest($"Customer Id: '{customerId}' is not a valid Guid.");
+            return BadRequest($"Customer Id: '{id}' is not a valid Guid.");
         }
 
-        var IsdeletionSuccessful = await _customerService.DeleteCustomerAsync(new Guid(customerId));
+        var IsDeletionSuccessful = await _customerService.DeleteCustomerAsync(new Guid(id));
 
-        return IsdeletionSuccessful == false ? NotFound() : NoContent();
+        return IsDeletionSuccessful == false ? BadRequest() : NoContent();
     }
 
-    [HttpPut(Name = "UpdateCustomer")]
+    [HttpPut, Route("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CustomerDetailsDto>> Put(string customerId, NewCustomerDto newCustomer)
+    public async Task<ActionResult<CustomerDto>> Put(string id, CustomerCommand newCustomer)
     {
         _logger.LogInformation($"Updating the following customer's details: {newCustomer.CustomerName}");
 
-        var isValid = Guid.TryParse(customerId, out _);
+        var isValid = Guid.TryParse(id, out _);
 
         if (!isValid)
         {
-            return BadRequest($"Customer Id: '{customerId}' is not a valid Guid.");
+            return BadRequest($"Customer Id: '{id}' is not a valid Guid.");
         }
 
-        var customer = _customerService.GetCustomer(Guid.Parse(customerId));
+        var customer = _customerService.GetCustomer(Guid.Parse(id));
 
         if (customer != null)
         {
-            var customerDetails = await _customerService.UpdateCustomerDetailsAsync(customerId, newCustomer);
+            var customerDetails = await _customerService.UpdateCustomerDetailsAsync(id, newCustomer);
             
             if (customerDetails != null)
             {
@@ -125,6 +115,6 @@ public class CustomerController : ControllerBase
             return customerDetails == null ? BadRequest("One or more customer details were invalid") : customerDetails;
         }
 
-        return NotFound($"Customer ID: {customerId} not found");
+        return BadRequest($"One or more customer details were invalid");
     }
 }

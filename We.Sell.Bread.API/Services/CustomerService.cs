@@ -14,7 +14,7 @@ namespace We.Sell.Bread.API.Services
             _customerRepository = new CustomerRepository();
         }
 
-        public async Task<CustomerDetailsDto> AddNewCustomerAsync(string customerName, string contactNo, string emailAddress, string physicalAddress)
+        public async Task<CustomerDto> AddNewCustomerAsync(string customerName, string contactNo, string emailAddress, string physicalAddress)
         {
             Validate.NullOrEmptyArgument(customerName);
             Validate.NullOrEmptyArgument(contactNo);
@@ -23,34 +23,36 @@ namespace We.Sell.Bread.API.Services
 
             Validate.ArgumentType(customerName, typeof(string));
 
-            var cus = new NewCustomerDto(customerName,contactNo,emailAddress,physicalAddress);
+            var cus = new CustomerCommand(customerName,contactNo,emailAddress,physicalAddress);
 
             var customer = await _customerRepository.CreateCustomerAsync(cus);
 
             return customer !=null ? customer : null;
         }
 
-        public async Task<CustomerDetailsDto?> UpdateCustomerDetailsAsync(string customerId, NewCustomerDto customer)
+        public async Task<CustomerDto?> UpdateCustomerDetailsAsync(string customerId, CustomerCommand customer)
         {
-            var customerDetailsDto = new CustomerDetailsDto
+            var customerDetailsDto = new CustomerDto
                 (Guid.Parse(customerId), customer.CustomerName, customer.ContactNo, customer.EmailAddress, customer.PhysicalAddress);
 
             return Validate.ValidateCustomerDetailsDto(customerDetailsDto) ? await _customerRepository.UpdateCustomer(customerDetailsDto) : null ;
         }
 
-        public CustomerDetailsDto? GetCustomer(Guid id)
+        public CustomerDto? GetCustomer(Guid id)
         {
             Validate.NullOrEmptyArgument(id.ToString());
 
             var customer = _customerRepository.GetCustomerById(id.ToString());
 
             return customer != null ?
-                new CustomerDetailsDto(id, customer.CustomerName, customer.ContactNo, customer.EmailAddress, customer.PhysicalAddress) : null;
+                new CustomerDto(id, customer.CustomerName, customer.ContactNo, customer.EmailAddress, customer.PhysicalAddress) : null;
         }
 
-        public IEnumerable<CustomerDetailsDto> GetAllCustomers()
+        public IEnumerable<CustomerDto> GetAllCustomers()
         {
-            return _customerRepository.GetAllCustomers();
+            var customers = _customerRepository.GetAllCustomers();
+
+            return customers;
         }
 
         public async Task<bool> DeleteCustomerAsync(Guid id)

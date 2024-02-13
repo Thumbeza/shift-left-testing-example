@@ -1,4 +1,4 @@
-# This workflow will build, test and deploy math api project
+# This workflow will build, test and deploy we sell bread API project
 
 name: build_test_and_deploy
 
@@ -31,15 +31,15 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     
-    # Run unit tests and collect code coverage
+    # Run API unit tests and collect code coverage
     - name: Run API Unit Tests
       run: dotnet test We.Sell.Bread.API.Unit.Tests/We.Sell.Bread.API.Unit.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
 
-    # Run unit tests and collect code coverage
+    # Run Infrastructure unit tests and collect code coverage
     - name: Run Infrastructure Unit Tests
       run: dotnet test We.Sell.Bread.Infrastructure.Tests/We.Sell.Bread.Infrastructure.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
 
-    # Run Integration tests and collect code coverage
+    # Run API Integration tests and collect code coverage
     - name: Run Integration Tests
       run: dotnet test We.Sell.Bread.API.Integration.Tests/We.Sell.Bread.API.Integration.Tests.csproj --collect:"XPlat Code Coverage" --no-build --verbosity normal
     
@@ -121,43 +121,5 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.0.x
-
-  # approve_staging_or_uat_release: 
-  #   runs-on: ubuntu-latest 
-
-  #   steps:
-  #     - uses: trstringer/manual-approval@v1
-  #       with:
-  #         secret: ${{ github.TOKEN }}
-  #         approvers: Thumbeza
-  #         minimum-approvals: 1
-  #         issue-title: "Deploying v1.3.5 to prod from staging"
-  #         issue-body: "Please approve or deny the deployment of version v1.3.5."
-  #         exclude-workflow-initiator-as-approver: false
-  #         additional-approved-words: ''
-  #         additional-denied-words: ''
-
-  # deploy_to_staging_or_uat:
-  #   needs: approve_staging_or_uat_release
-  #   runs-on: ubuntu-latest
-
-    # steps:
-    # Download API artefacts
-    # - name: Download API Artifacts
-    #   uses: actions/download-artifact@v2.1.1
-      # with:
-      #   name: api
-      #   path: /home/runner/work/shift-left-testing-example/shift-left-testing-example/bread-api
-
-  # staging_e2e_tests:
-  #   needs: deploy_to_staging_or_uat
-  #   runs-on: ubuntu-latest
-      
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Setup .NET
-  #       uses: actions/setup-dotnet@v3
-  #       with:
-  #         dotnet-version: 6.0.x
 
   

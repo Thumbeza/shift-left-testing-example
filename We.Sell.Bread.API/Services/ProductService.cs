@@ -14,7 +14,7 @@ namespace We.Sell.Bread.API.Services
             _productRepository = new ProductRepository();
         }
 
-        public async Task<ProductDetailsDto> AddNewProductAsync(string productName, decimal price, string description, int stockQuantity)
+        public async Task<ProductDto> AddNewProductAsync(string productName, decimal price, string description, int stockQuantity)
         {
             Validate.NullOrEmptyArgument(productName);
             Validate.NullOrEmptyArgument(price.ToString());
@@ -23,24 +23,24 @@ namespace We.Sell.Bread.API.Services
 
             Validate.ArgumentType(productName, typeof(string));
 
-            var prod = new NewProductDto(productName, price, description, stockQuantity);
+            var prod = new ProductCommand(productName, price, description, stockQuantity);
 
             var product = await _productRepository.CreateProductAsync(prod);
 
             return product != null ? product : null;
         }
 
-        public ProductDetailsDto? GetProduct(Guid id)
+        public ProductDto? GetProduct(Guid id)
         {
             Validate.NullOrEmptyArgument(id.ToString());
 
             var product = _productRepository.GetProductById(id.ToString());
 
             return product != null ?
-                new ProductDetailsDto(id, product.ProductName,product.Price,product.Description,product.StockQuantity) : null;
+                new ProductDto(id, product.ProductName,product.Price,product.Description,product.StockQuantity) : null;
         }
 
-        public IEnumerable<ProductDetailsDto> GetAllProducts()
+        public IEnumerable<ProductDto> GetAllProducts()
         {
             return _productRepository.GetAllProducts();
         }

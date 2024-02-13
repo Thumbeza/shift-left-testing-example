@@ -4,8 +4,8 @@ namespace We.Sell.Bread.Core.Interfaces
 {
     public interface IProductService
     {
-        Task<ProductDetailsDto> AddNewProductAsync(string productName, decimal price, string description, int stockQuantity);
-        ProductDetailsDto GetProduct(Guid productId);
-        IEnumerable<ProductDetailsDto> GetAllProducts();
+        Task<ProductDto> AddNewProductAsync(string productName, decimal price, string description, int stockQuantity);
+        ProductDto GetProduct(Guid productId);
+        IEnumerable<ProductDto> GetAllProducts();
     }
 }

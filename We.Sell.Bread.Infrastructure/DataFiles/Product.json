@@ -1,34 +1,34 @@
 [
   {
-    "ProductId": "411fbad3-925e-4044-9269-f962641f9277",
+    "Id": "411fbad3-925e-4044-9269-f962641f9277",
     "ProductName": "Pumpernickel Bread",
     "Price": 20.00,
     "Description": "A dense, dark bread made from coarsely ground whole rye grains",
     "StockQuantity": 7
   },
   {
-    "ProductId": "7782eb61-534e-40ba-aa2e-6f6e54ae2bfc",
+    "Id": "7782eb61-534e-40ba-aa2e-6f6e54ae2bfc",
     "ProductName": "Multigrain Bread",
     "Price": 22.05,
     "Description": "Contains a mix of various grains and seeds, providing a diverse nutritional profile.",
     "StockQuantity": 69
   },
   {
-    "ProductId": "bef85d03-3452-4a38-be75-80570f0c682f",
+    "Id": "bef85d03-3452-4a38-be75-80570f0c682f",
     "ProductName": "White Bread",
     "Price": 17.88,
     "Description": "A classic bread made from refined wheat flour, known for its soft texture and mild flavor.",
     "StockQuantity": 14
   },
   {
-    "ProductId": "29b9574a-4daa-4dc4-a8fd-ec8998cf4831",
+    "Id": "29b9574a-4daa-4dc4-a8fd-ec8998cf4831",
     "ProductName": "Rye Bread",
     "Price": 26.50,
     "Description": "Made from rye flour, this bread has a distinct flavor and denser texture than white bread",
     "StockQuantity": 47
   },
   {
-    "ProductId": "e9f896fb-281b-4683-ad25-48ad056f619d",
+    "Id": "e9f896fb-281b-4683-ad25-48ad056f619d",
     "ProductName": "Sourdough Bread",
     "Price": 45.10,
     "Description": "Fermented with naturally occurring wild yeast and lactic acid bacteria, giving it a tangy flavo",

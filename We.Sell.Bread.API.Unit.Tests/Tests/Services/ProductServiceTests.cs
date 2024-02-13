@@ -19,16 +19,16 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             var product = _productService.GetAllProducts();
 
             product.Should().NotBeNull();
-            product.Should().BeOfType(typeof(List<ProductDetailsDto>));
+            product.Should().BeOfType(typeof(List<ProductDto>));
         }
 
         [Fact]
         public void GivenCorrectIdShouldExistAndReturnTypeObjectProductDetailsDto()
         {
-            ProductDetailsDto? product = _productService.GetProduct(ProductData.ProductIdGuid);
+            ProductDto? product = _productService.GetProduct(ProductData.ProductIdGuid);
 
             product.Should().NotBeNull();
-            product.Should().BeOfType(typeof(ProductDetailsDto));
+            product.Should().BeOfType(typeof(ProductDto));
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             var product = await _productService.AddNewProductAsync(productName, price, description, stockQuantity);
 
             product.Should().NotBeNull();
-            product.Should().BeOfType(typeof(ProductDetailsDto));
+            product.Should().BeOfType(typeof(ProductDto));
             product.ProductName.Should().Be(productName);
             product.Price.Should().Be(price);
             product.Description.Should().Be(description);

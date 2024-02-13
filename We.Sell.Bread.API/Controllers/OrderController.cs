@@ -4,33 +4,27 @@ namespace We.Sell.Bread.API.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class OrderController : ControllerBase
+public class OrderController(ILogger<OrderController> logger) : ControllerBase
 {
-    private readonly ILogger<OrderController> _logger;
-    private readonly OrderFacade _orderFacade;
-
-    public OrderController(ILogger<OrderController> logger)
-    {
-        _logger = logger;
-        _orderFacade = new OrderFacade();
-    }
+    private readonly ILogger<OrderController> _logger = logger;
+    private readonly OrderFacade _orderFacade = new();
 
     [HttpPost(Name = "CreateOrder")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<OrderDetailsDto> Post(string custormerId)
+    public ActionResult<OrderDetailsDto> Post(string customerId)
     {
 
         _logger.LogInformation("Attempting to create a new order");
 
-        if (custormerId == null) 
+        if (customerId == null) 
         {
             return BadRequest("A valid customer must be added before placing an order.");
         }
 
-        var order = _orderFacade.PlaceOrder(new Guid(custormerId));
+        var order = _orderFacade.PlaceOrder(new Guid(customerId));
 
-        _logger.LogInformation($"New order hase been created: {order.Id}");
+        _logger.LogInformation($"New order has been created: {order.Id}");
 
         return order == null ? BadRequest() : order;
     }
