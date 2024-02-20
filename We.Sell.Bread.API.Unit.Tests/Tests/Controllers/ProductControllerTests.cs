@@ -49,5 +49,29 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
             response.Should().NotBeNull();
             response.Should().BeOfType(typeof(ActionResult<ProductDto>));
         }
+
+        [Fact]
+        public async void GivenCorrectDetailsWhenUpdatingAnExistingCustomerResponseStatusShouldBeCustomerDetailsDtoActionResult()
+        {
+            var productName = Faker.Name.First();
+            var price = Faker.RandomNumber.Next();
+            var description = Faker.Name.FullName();
+            var stockQty = Faker.RandomNumber.Next();
+            var newTestProductDto = new ProductCommand(productName, price, description, stockQty);
+
+            var testProduct = (await _productController.Post(newTestProductDto)).Value;
+            var testProductId = testProduct.Id.ToString();
+
+            newTestProductDto.ProductName = "Challah";
+            newTestProductDto.Description = "A braided Jewish bread made with eggs, giving it a rich and slightly sweet taste.";
+
+            var updateCustomerResponse = await _productController.Put(testProductId, newTestProductDto);
+
+            updateCustomerResponse.Should().NotBeNull();
+            updateCustomerResponse.Should().BeOfType<ActionResult<ProductDto>>();
+
+            //TODO: call delete endpoint, to clean the json file.
+            
+        }
     }
 }

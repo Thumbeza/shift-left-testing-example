@@ -66,4 +66,35 @@ public class ProductController(ILogger<ProductController> logger) : ControllerBa
 
         return products.Count == 0 ? NoContent() : products;
     }
+
+    [HttpPut, Route("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ProductDto>> Put(string id, ProductCommand newProduct)
+    {
+        _logger.LogInformation($"Updating the following product's details: {newProduct.ProductName}");
+
+        var isValid = Guid.TryParse(id, out _);
+
+        if (!isValid)
+        {
+            return BadRequest($"Product Id: '{id}' is not a valid Guid.");
+        }
+
+        var product = _productService.GetProduct(Guid.Parse(id));
+
+        if (product != null)
+        {
+            var productDetails = await _productService.UpdateProductDetailsAsync(id, newProduct);
+
+            if (productDetails != null)
+            {
+                _logger.LogInformation($"Product: {productDetails.Id} details have been updated.");
+            }
+
+            return productDetails == null ? BadRequest("One or more product details were invalid") : productDetails;
+        }
+
+        return BadRequest($"One or more product details were invalid");
+    }
 }

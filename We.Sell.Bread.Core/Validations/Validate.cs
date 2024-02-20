@@ -1,6 +1,7 @@
 ﻿using System.Net.Mail;
 using System.Net.NetworkInformation;
 using We.Sell.Bread.Core.DTOs.Customer;
+using We.Sell.Bread.Core.DTOs.Product;
 using We.Sell.Bread.Core.Exceptions;
 
 namespace We.Sell.Bread.Core.Validations
@@ -37,6 +38,24 @@ namespace We.Sell.Bread.Core.Validations
             {
 
                 return false;
+            }
+
+            return true;
+        }
+
+        public static bool ValidateProductDetailsDto(ProductDto product)
+        {
+            try
+            {
+                NullOrEmptyArgument(product.ProductName);
+                NullOrEmptyArgument(product.Price.ToString());
+                NullOrEmptyArgument(product.Description);
+                NullOrEmptyArgument(product.StockQuantity.ToString());
+            }
+            catch (ArgumentNullException)
+            {
+                return false;
+               
             }
 
             return true;
