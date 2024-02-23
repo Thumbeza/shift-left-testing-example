@@ -58,5 +58,21 @@ namespace We.Sell.Bread.Infrastructure.Repository
 
             return product;
         }
+
+        public async Task<ProductDto> UpdateProduct(ProductDto entity)
+        {
+            var productJsonString = JsonHelper.ReadJsonFile(_ProductFilePath);
+
+            var existingproductsList = JsonHelper.Deserialize<IList<ProductDto>>(productJsonString);
+
+            var productDtoToFind = existingproductsList.FirstOrDefault(x => x.Id.ToString() == entity.Id.ToString());
+
+            existingproductsList.Remove(productDtoToFind);
+            existingproductsList.Add(entity);
+
+            await JsonHelper.StreamWriteAsync(existingproductsList, _ProductFilePath);
+
+            return entity;
+        }
     }
 }

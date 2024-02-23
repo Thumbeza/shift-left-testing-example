@@ -7,5 +7,8 @@ namespace We.Sell.Bread.Core.Interfaces
         Task<ProductDto> AddNewProductAsync(string productName, decimal price, string description, int stockQuantity);
         ProductDto GetProduct(Guid productId);
         IEnumerable<ProductDto> GetAllProducts();
+        Task<ProductDto> UpdateProductDetailsAsync(string productId,ProductCommand product);
+
+
     }
 }

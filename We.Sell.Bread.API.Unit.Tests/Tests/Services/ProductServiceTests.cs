@@ -92,5 +92,36 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
 
             await product.Should().ThrowAsync<ArgumentException>().WithMessage(" cannot be empty or null"); 
         }
+
+        [Fact]
+        public async Task GivenEmptyProductNameWhenUpdatingproductReturnShouldBeNull()
+        {
+            var productId = Guid.NewGuid().ToString();
+            var productName = string.Empty;
+            var price = Convert.ToDecimal(Faker.RandomNumber.Next(50));
+            var description = Faker.Lorem.GetFirstWord();
+            var stockQuantity = Faker.RandomNumber.Next(90);
+
+            var newProductDto = new ProductCommand(productName, price, description, stockQuantity);
+
+            var customer = await _productService.UpdateProductDetailsAsync(productId, newProductDto);
+
+            customer.Should().BeNull();
+        }
+        [Fact]
+        public async Task GivenEmptyDescriptionWhenUpdatingproductReturnShouldBeNull()
+        {
+            var productId = Guid.NewGuid().ToString();
+            var productName = Faker.Name.FullName();
+            var price = Convert.ToDecimal(Faker.RandomNumber.Next(50));
+            var description = string.Empty;
+            var stockQuantity = Faker.RandomNumber.Next(90);
+
+            var newProductDto = new ProductCommand(productName, price, description, stockQuantity);
+
+            var customer = await _productService.UpdateProductDetailsAsync(productId, newProductDto);
+
+            customer.Should().BeNull();
+        }
     }
 }

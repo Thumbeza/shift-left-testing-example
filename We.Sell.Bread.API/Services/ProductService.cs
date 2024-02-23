@@ -44,5 +44,13 @@ namespace We.Sell.Bread.API.Services
         {
             return _productRepository.GetAllProducts();
         }
+
+        public async Task<ProductDto?> UpdateProductDetailsAsync(string ProductId, ProductCommand product)
+        {
+            var productDetailsDto = new ProductDto
+                (Guid.Parse(ProductId), product.ProductName,product.Price,product.Description,product.StockQuantity);
+
+            return Validate.ValidateProductDetailsDto(productDetailsDto) ? await _productRepository.UpdateProduct(productDetailsDto) : null;
+        }
     }
 }
