@@ -49,5 +49,44 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Controllers
             response.Should().NotBeNull();
             response.Should().BeOfType(typeof(ActionResult<ProductDto>));
         }
+
+        [Fact]
+        public async void GivenCorrectDetailsWhenDeletingProductReturnTypeMustBeNoContentStatusCode()
+        {
+            var productName = Faker.Name.First();
+            var price = Faker.RandomNumber.Next();
+            var description = Faker.Name.FullName();
+            var stockQuantity = Faker.RandomNumber.Next();
+
+            var product = new ProductCommand(productName, price, description, stockQuantity);
+
+            var productDto = await _productController.Post(product);
+
+            var productId = productDto.Value.Id.ToString();
+
+            var result = _productController.Delete(productId);
+
+            result.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public void GivenInvalidInputWhenDeletingProductReturnTypeMustBeBadRequestStatusCode()
+        {
+            var invalidId = Faker.RandomNumber.Next().ToString();
+
+            var result = _productController.Delete(invalidId);
+
+            result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [Fact]
+        public void GivenIncorrectIdWhenDeletingProductReturnTypeMustBeNotFoundStatusCode()
+        {
+            var incorrectProductId = Guid.NewGuid().ToString();
+
+            var result = _productController.Delete(incorrectProductId);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
     }
 }

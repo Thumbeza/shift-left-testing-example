@@ -7,5 +7,6 @@ namespace We.Sell.Bread.Core.Interfaces
         Task<ProductDto>CreateProductAsync(ProductCommand entity);
         ProductDto GetProductById(string productId);
         IEnumerable<ProductDto> GetAllProducts();
+        Task<bool> DeleteProductAsync(string id);
     }
 }

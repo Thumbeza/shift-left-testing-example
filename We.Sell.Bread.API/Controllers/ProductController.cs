@@ -66,4 +66,29 @@ public class ProductController(ILogger<ProductController> logger) : ControllerBa
 
         return products.Count == 0 ? NoContent() : products;
     }
+
+    [HttpDelete, Route("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult Delete(string id)
+    {
+        _logger.LogInformation($"Deleting product with ID: {id}");
+
+        var isIdValid = Guid.TryParse(id, out _);
+
+        if (!isIdValid)
+        {
+            return BadRequest($"Product Id: '{id}' is not a valid Guid.");
+        }
+
+        var isProductDeleted = _productService.DeleteProduct(id).Result;
+
+        if (isProductDeleted)
+        {
+            _logger.LogInformation($"Product {id} deleted");
+        }
+
+        return isProductDeleted ? NoContent() : NotFound();
+    }
 }

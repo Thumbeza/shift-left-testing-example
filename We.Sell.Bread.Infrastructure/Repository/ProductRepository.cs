@@ -1,4 +1,5 @@
-﻿using We.Sell.Bread.Core.DTOs.Product;
+﻿using We.Sell.Bread.Core.DTOs.Customer;
+using We.Sell.Bread.Core.DTOs.Product;
 using We.Sell.Bread.Core.Interfaces;
 using We.Sell.Bread.Infrastructure.Helpers;
 
@@ -37,6 +38,26 @@ namespace We.Sell.Bread.Infrastructure.Repository
             await JsonHelper.StreamWriteAsync(products, _ProductFilePath);
 
             return newProduct;
+        }
+
+        public async Task<bool> DeleteProductAsync(string id)
+        {
+            var productJson = JsonHelper.ReadJsonFile(_ProductFilePath);
+
+            var products = JsonHelper.Deserialize<List<ProductDto>>(productJson);
+
+            var productToRemove = products.FirstOrDefault(product => product.Id.ToString() == id);
+
+            if (productToRemove != null)
+            {
+                products.Remove(productToRemove);
+
+                await JsonHelper.StreamWriteAsync(products, _ProductFilePath);
+
+                return true;
+            }
+
+            return false;
         }
 
         public IEnumerable<ProductDto> GetAllProducts()

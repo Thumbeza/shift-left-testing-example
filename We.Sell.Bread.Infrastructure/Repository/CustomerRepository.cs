@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using We.Sell.Bread.Core.DTOs.Customer;
+﻿using We.Sell.Bread.Core.DTOs.Customer;
 using We.Sell.Bread.Core.Interfaces;
 using We.Sell.Bread.Infrastructure.Helpers;
 
@@ -14,7 +13,7 @@ namespace We.Sell.Bread.Infrastructure.Repository
         {
             _basePath = FileHelper.GetBasePath();
 
-            _customerFilePath = $"{_basePath}/We.Sell.Bread.Infrastructure/DataFiles/Customer.json"; ;
+            _customerFilePath = $"{_basePath}/We.Sell.Bread.Infrastructure/DataFiles/Customer.json";
         }
 
         public async Task<CustomerDto> CreateCustomerAsync(CustomerCommand entity)

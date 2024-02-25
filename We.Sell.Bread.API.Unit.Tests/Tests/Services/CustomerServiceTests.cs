@@ -1,5 +1,4 @@
-﻿using Castle.Core.Resource;
-using We.Sell.Bread.API.Unit.Tests.TestData;
+﻿using We.Sell.Bread.API.Unit.Tests.TestData;
 
 namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
 {

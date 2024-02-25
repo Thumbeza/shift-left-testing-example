@@ -44,5 +44,10 @@ namespace We.Sell.Bread.API.Services
         {
             return _productRepository.GetAllProducts();
         }
+
+        public async Task<bool> DeleteProduct(string id)
+        {
+            return await _productRepository.DeleteProductAsync(id);
+        }
     }
 }

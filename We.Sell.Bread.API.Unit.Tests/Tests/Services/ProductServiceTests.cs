@@ -1,5 +1,4 @@
-﻿
-using We.Sell.Bread.API.Unit.Tests.TestData;
+﻿using We.Sell.Bread.API.Unit.Tests.TestData;
 using We.Sell.Bread.Core.DTOs.Product;
 
 namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
@@ -91,6 +90,41 @@ namespace We.Sell.Bread.API.Unit.Tests.Tests.Services
             var product = async () => await _productService.AddNewProductAsync(productName, price, description, stockQuantity);
 
             await product.Should().ThrowAsync<ArgumentException>().WithMessage(" cannot be empty or null"); 
+        }
+
+        [Fact]
+        public async void GivenCorrectIdWhenDeletingProductShouldReturnTrue()
+        {
+            var productName = Faker.Name.First();
+            var price = Convert.ToDecimal(Faker.RandomNumber.Next());
+            var description = Faker.Name.FullName();
+            var stockQuantity = Faker.RandomNumber.Next();
+
+            var product = await _productService.AddNewProductAsync(productName, price, description, stockQuantity);
+
+            var isDeleted = await _productService.DeleteProduct(product.Id.ToString());
+
+            isDeleted.Should().BeTrue();
+        }
+
+        [Fact]
+        public async void GivenIncorrectIdWhenDeletingProductShouldBeFalse()
+        {
+            var incorrectId = Guid.NewGuid().ToString();
+
+            var isDeleted = await _productService.DeleteProduct(incorrectId);
+
+            isDeleted.Should().BeFalse();
+        }
+
+        [Fact]
+        public async void GivenInvalidIdWhenDeletingProductShouldBeFalse()
+        {
+            var invalidId = Faker.RandomNumber.Next().ToString();
+
+            var isDeleted = await _productService.DeleteProduct(invalidId);
+
+            isDeleted.Should().BeFalse();
         }
     }
 }
